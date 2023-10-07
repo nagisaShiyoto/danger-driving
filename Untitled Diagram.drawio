@@ -1,10 +1,10 @@
-<mxfile host="app.diagrams.net" modified="2023-10-07T20:57:39.665Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36" etag="CtkdnwhM4XQjiPLEm3_V" version="22.0.4" type="gitlab">
+<mxfile host="app.diagrams.net" modified="2023-10-07T20:58:28.619Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36" etag="Lf31cBSkEU8xr53YQS8I" version="22.0.4" type="gitlab">
   <diagram name="Page-1" id="QeGY7YJkOB6Gk27wGhlt">
-    <mxGraphModel dx="1114" dy="1820" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2562" dy="2756" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="LMJcDKzFn9YI1MvOlHuu-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="LMJcDKzFn9YI1MvOlHuu-96" target="LMJcDKzFn9YI1MvOlHuu-2">
+        <mxCell id="LMJcDKzFn9YI1MvOlHuu-217" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="LMJcDKzFn9YI1MvOlHuu-1" target="LMJcDKzFn9YI1MvOlHuu-96">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="LMJcDKzFn9YI1MvOlHuu-1" value="יוצר/מקבל את ערכי המודל הסטיססטי CCA" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
@@ -180,11 +180,8 @@
         <mxCell id="LMJcDKzFn9YI1MvOlHuu-71" value="זיהוי פניות" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="930" y="-140" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="LMJcDKzFn9YI1MvOlHuu-97" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="LMJcDKzFn9YI1MvOlHuu-1" target="LMJcDKzFn9YI1MvOlHuu-96">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="770" y="-1040" as="sourcePoint" />
-            <mxPoint x="460" y="-1000" as="targetPoint" />
-          </mxGeometry>
+        <mxCell id="LMJcDKzFn9YI1MvOlHuu-218" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="LMJcDKzFn9YI1MvOlHuu-96" target="LMJcDKzFn9YI1MvOlHuu-2">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="LMJcDKzFn9YI1MvOlHuu-96" value="נועל את מנעול הנתונים" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="560" y="-1050" width="120" height="60" as="geometry" />
