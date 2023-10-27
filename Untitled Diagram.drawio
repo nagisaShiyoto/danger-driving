@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-10-27T08:16:59.164Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36" etag="kXwNPyQDeFvbg4_Yi33B" version="22.0.8" type="gitlab">
+<mxfile host="app.diagrams.net" modified="2023-10-27T08:29:36.861Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36" etag="zh6ltkPUh6yBvlUkqf6u" version="22.0.8" type="gitlab">
   <diagram name="Page-1" id="QeGY7YJkOB6Gk27wGhlt">
-    <mxGraphModel dx="1113" dy="1718" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="659" dy="1476" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -407,8 +407,8 @@
         <mxCell id="dCyXNis5el85JORpCB2Q-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="dCyXNis5el85JORpCB2Q-4" target="dCyXNis5el85JORpCB2Q-6">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="dCyXNis5el85JORpCB2Q-4" value="זיהוי 10 מכוניות (או פחות) הכי קרובות" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="1990" y="-669" width="120" height="60" as="geometry" />
+        <mxCell id="dCyXNis5el85JORpCB2Q-4" value="זיהוי מספר מסוים(10) מכוניות (או פחות) הכי קרובות" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1990" y="-668.5" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="dCyXNis5el85JORpCB2Q-14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="dCyXNis5el85JORpCB2Q-6" target="dCyXNis5el85JORpCB2Q-13">
           <mxGeometry relative="1" as="geometry" />
