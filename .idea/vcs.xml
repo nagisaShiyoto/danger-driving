@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Traffic-Signs-Detection-Tensorflow-YOLOv3-YOLOv4" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Vehicle-Detection" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/YAD2K" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/YOLO_car_detection" vcs="Git" />
+  </component>
+</project>
