@@ -6,5 +6,8 @@
     <mapping directory="$PROJECT_DIR$/Vehicle-Detection" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/YAD2K" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/YOLO_car_detection" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Yolo-Vehicle-Counter" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Yolo-Vehicle-Counter/yolov5" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/yolov5" vcs="Git" />
   </component>
 </project>
