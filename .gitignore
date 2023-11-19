@@ -608,7 +608,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-
+mobylie/mobylie/videos/
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 
