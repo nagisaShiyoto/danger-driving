@@ -1,12 +1,10 @@
 //////////////////general includes//////////////////
 #include <iostream>
+#include "vidLoader.h"
 //////////////////general includes//////////////////
 
 //////////////////opencv includes////////////////////
-#include <opencv2/core.hpp>
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/highgui.hpp>
-using namespace cv;
+
 
 //////////////////opencv includes////////////////////
 
@@ -19,12 +17,23 @@ namespace py = pybind11;
 //////////////////pybind includes////////////////////
 
 int main() {
+    std::string const VIDEO_NAME = "highway1.mp4";
+    bool const LIVE = false;
+    cv::namedWindow("test", cv::WINDOW_AUTOSIZE);
+    cv::VideoCapture cap;
+    vidLoader loader("videos/" + VIDEO_NAME);
+    //vidLoader loader("");
+    cv::Mat frame = loader.getNextFrame();
+    while (!frame.empty())
+    {
 
-    cv::Mat img = cv::imread("C:\\Users\\test0\\Downloads\\idkk\\input_images\\test.jpg");
-    namedWindow("First OpenCV Application", WINDOW_AUTOSIZE);
-    cv::imshow("First OpenCV Application", img);
-    cv::moveWindow("First OpenCV Application", 0, 45);
-    cv::waitKey(0);
+        cv::imshow("test", frame);
+        if (cv::waitKey(1) >= 0)
+        {
+            break;
+        }
+        frame = loader.getNextFrame();
+    }
     cv::destroyAllWindows();
     try
     {
