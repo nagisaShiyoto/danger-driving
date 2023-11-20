@@ -19,17 +19,16 @@ def load_images_from_folder(folder):
 
 
 def add(input_folder_path):
-    output_folder_path = "C:/Users/test0/Downloads/idkk/output_images"
     all_images = load_images_from_folder(input_folder_path)
     print('Total Images: ',len(all_images))
     HEIGHT = 32
     WIDTH = 32
 
-    net = cv2.dnn.readNet("C:/Users/test0/Downloads/idkk/yolov3_training_last.weights", "C:/Users/test0/Downloads/idkk/yolov3_training.cfg")
+    net = cv2.dnn.readNet("model_data/yolov3_training_last.weights", "model_data/yolov3_training.cfg")
     #net = cv2.dnn.readNet("yolov4-tiny_training_last.weights", "yolov4-tiny_training.cfg")
 
     classes = []
-    with open("C:/Users/test0/Downloads/idkk/signs.names.txt", "r") as f:
+    with open("model_data/signs.names.txt", "r") as f:
         classes = [line.strip() for line in f.readlines()]
 
     #get last layers names
@@ -48,7 +47,7 @@ def add(input_folder_path):
     font = cv2.FONT_HERSHEY_SIMPLEX
     classification_model =  load_classification_model('C:/Users/test0/Downloads/idkk/traffic.h5') #load mask detection model
     classes_classification = []
-    with open("C:/Users/test0/Downloads/idkk/signs_classes.txt", "r") as f:
+    with open("model_data/signs_classes.txt", "r") as f:
         classes_classification = [line.strip() for line in f.readlines()]
 
         for i in range(len(all_images)):
