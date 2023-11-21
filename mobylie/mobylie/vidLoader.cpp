@@ -35,3 +35,4 @@ cv::Mat vidLoader::getCurrentFrame()
 {
 	return this->Currntframe;
 }
+
