@@ -8,12 +8,14 @@
 
 //////////////////opencv includes////////////////////
 
+
+
 //////////////////pybind includes////////////////////
 #include <pybind11/embed.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
+#include <pybind11/numpy.h>
 namespace py = pybind11;
-
 //////////////////pybind includes////////////////////
 
 int main() {
@@ -24,17 +26,17 @@ int main() {
     vidLoader loader("videos/" + VIDEO_NAME);
     //vidLoader loader("");
     cv::Mat frame = loader.getNextFrame();
-    while (!frame.empty())
-    {
+    //while (!frame.empty())
+    //{
 
-        cv::imshow("test", frame);
-        if (cv::waitKey(1) >= 0)
-        {
-            break;
-        }
-        frame = loader.getNextFrame();
-    }
-    cv::destroyAllWindows();
+    //    cv::imshow("test", frame);
+    //    if (cv::waitKey(1) >= 0)
+    //    {
+    //        break;
+    //    }
+    //    frame = loader.getNextFrame();
+    //}
+    //cv::destroyAllWindows();
     try
     {
         // Create a scoped interpreter for the second Python environment
@@ -43,8 +45,8 @@ int main() {
         // Import the Python module from the second environment
         auto nul = py::module::import("detection_from_folder"); // import the sign module
         auto multipl = nul.attr("add"); // get fanc
-        multipl("C:/Users/test0/Downloads/idkk/input_images"); // use
-
+        std::string output=multipl(loader.frameFileName).cast<std::string>(); // use
+        
         auto test = py::module::import("detect");//import the car(and poeple) module
         auto testFanc = test.attr("run");//get fanc
         testFanc();//use

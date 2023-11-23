@@ -1,5 +1,6 @@
 #include "vidLoader.h"
 
+
 vidLoader::vidLoader()
 {
 	this->cap.open(0);//get feed from the first camera in setup
@@ -28,6 +29,7 @@ vidLoader::vidLoader(std::string path)
 cv::Mat vidLoader::getNextFrame()
 {
 	this->cap >> this->Currntframe;
+	cv::imwrite(this->frameFileName, this->Currntframe);//save img in file temp
 	return this->Currntframe;
 }
 
@@ -35,4 +37,3 @@ cv::Mat vidLoader::getCurrentFrame()
 {
 	return this->Currntframe;
 }
-
