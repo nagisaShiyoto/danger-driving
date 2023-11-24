@@ -1,7 +1,7 @@
 #Import Relevant Libraries
 import numpy as np
 import cv2
-import time
+#import time
 import os
 from tensorflow.keras import models
 
@@ -19,9 +19,8 @@ def load_images_from_folder(folder):
 
 def add(imgg):
     img=cv2.imread(imgg)
-    cv2.imshow("tset", img)
-    net = cv2.dnn.readNet("model_data/yolov3_training_last.weights", "model_data/yolov3_training.cfg")
-    #net = cv2.dnn.readNet("yolov4-tiny_training_last.weights", "yolov4-tiny_training.cfg")
+    #net = cv2.dnn.readNet("model_data/yolov3_training_last.weights", "model_data/yolov3_training.cfg")
+    net = cv2.dnn.readNet("model_data/yolov4-tiny_training_last.weights", "model_data/yolov4-tiny_training.cfg")
 
     classes = []
     with open("model_data/signs.names.txt", "r") as f:
@@ -31,20 +30,20 @@ def add(imgg):
     layer_names = net.getLayerNames()
     output_layers = [layer_names[i-1] for i in net.getUnconnectedOutLayers()]
     #output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
-    colors = np.random.uniform(0, 255, size=(len(classes), 3))
-    check_time = True
+    #colors = np.random.uniform(0, 255, size=(len(classes), 3))
+    #check_time = True
     confidence_threshold = 0.5
     font = cv2.FONT_HERSHEY_SIMPLEX
 
 
 
-    detection_confidence = 0.5
+    #detection_confidence = 0.5
     cap = cv2.VideoCapture(0)
     font = cv2.FONT_HERSHEY_SIMPLEX
-    classification_model =  load_classification_model('C:/Users/test0/Downloads/idkk/traffic.h5') #load mask detection model
-    classes_classification = []
+    #classification_model =  load_classification_model('model_data/traffic.h5') #load mask detection model
+    #classes_classification = []
     with open("model_data/signs_classes.txt", "r") as f:
-        classes_classification = [line.strip() for line in f.readlines()]
+        #classes_classification = [line.strip() for line in f.readlines()]
             #get image shape
         height, width, channels = img.shape
             #print(img.shape)

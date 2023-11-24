@@ -134,10 +134,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="imgDetector.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="vidLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="imgDetector.h" />
     <ClInclude Include="vidLoader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

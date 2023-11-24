@@ -614,3 +614,7 @@ mobylie/mobylie/videos/
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,opencv,python,c++
 /mobylie/mobylie/model_data
+/mobylie/mobylie/models/model_data
+/mobylie/mobylie/models/hub
+/mobylie/mobylie/models/classify
+/mobylie/mobylie/models
