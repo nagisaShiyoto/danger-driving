@@ -10,7 +10,7 @@ public:
 	imgDetector();
 	std::string dettectSign(std::string imgName);
 	std::string dettectCar(std::string imgName);
-private:
+public:
 	pybind11::scoped_interpreter* _interpreter2;
 	pybind11::object signDFanc;
 	pybind11::object carDFanc;

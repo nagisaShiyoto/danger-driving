@@ -21,7 +21,7 @@ int main() {
             cv::imshow("test", frame);
             time_t start, end;
             time(&start);
-            std::cout 
+            std::cout
                 <<"\n\n\n"
                 <<detector.dettectSign(loader.frameFileName) 
                 <<"\n\n\n" 

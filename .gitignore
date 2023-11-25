@@ -618,3 +618,5 @@ mobylie/mobylie/videos/
 /mobylie/mobylie/models/hub
 /mobylie/mobylie/models/classify
 /mobylie/mobylie/models
+/mobylie/mobylie/best.pt
+/mobylie/mobylie/best1.pt
