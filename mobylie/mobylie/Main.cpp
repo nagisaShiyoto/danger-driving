@@ -21,20 +21,20 @@ int main() {
             cv::imshow("test", frame);
             time_t start, end;
             time(&start);
-            std::cout
-                <<"\n\n\n"
-                <<detector.dettectSign(loader.frameFileName) 
-                <<"\n\n\n" 
-                << detector.dettectCar(loader.frameFileName)
-                ;
+            std::string CarRes = detector.dettectCar(loader.frameFileName);
+            std::string signRes = detector.dettectSign(loader.frameFileName);
+            detector.updateCars(CarRes);
+            detector.updateSigns(signRes);
+            std::cout<<detector.getFoundVehicles()[0]->getName();
             time(&end);
-
+            
             std::cout
+                <<"\n\n\n\n\n"
                 << "time:"
                 << end - start
                 <<"\n\n\n\n\n";
 
-            if (cv::waitKey(1) >= 0)
+            if (cv::waitKey(30) >= 0)
             {
                 break;
             }

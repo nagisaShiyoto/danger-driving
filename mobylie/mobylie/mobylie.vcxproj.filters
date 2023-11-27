@@ -24,12 +24,18 @@
     <ClCompile Include="imgDetector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vidLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="imgDetector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
