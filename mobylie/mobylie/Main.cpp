@@ -4,6 +4,7 @@
 #include "vidLoader.h"
 //////////////////general includes//////////////////
 
+#include <opencv2/opencv.hpp>
 
 int main() {
     try
@@ -18,14 +19,26 @@ int main() {
         cv::Mat frame = loader.getNextFrame();
         while (!frame.empty())
         {
-            cv::imshow("test", frame);
             time_t start, end;
             time(&start);
             std::string CarRes = detector.dettectCar(loader.frameFileName);
             std::string signRes = detector.dettectSign(loader.frameFileName);
             detector.updateCars(CarRes);
             detector.updateSigns(signRes);
-            std::cout<<detector.getFoundVehicles()[0]->getName();
+            for (auto it = detector.foundVehicles.begin(); it != detector.foundVehicles.end(); it++)
+            {
+                int* data = (*it)->getDataImg();
+                cv::Point topLeft(data[X] - data[WIDTH] / 2, data[Y] + data[HIGHT] / 2);
+                cv::Point bottomRight(data[X] + data[WIDTH] / 2, data[Y] - data[HIGHT] / 2);
+                cv::Rect rectangle(topLeft, bottomRight);
+                cv::rectangle(frame, rectangle, cv::Scalar(255, 0, 0), 1);
+                std::string text = (* it)->getName();
+                cv::Point textPosition(topLeft.x, topLeft.y + 10);
+
+                cv::putText(frame, text, textPosition, cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 0, 0), 2);
+
+            }
+
             time(&end);
             
             std::cout
@@ -38,7 +51,10 @@ int main() {
             {
                 break;
             }
+            cv::imshow("test", frame);
+
             frame = loader.getNextFrame();
+
         }
     }
     catch (const py::error_already_set& e) {

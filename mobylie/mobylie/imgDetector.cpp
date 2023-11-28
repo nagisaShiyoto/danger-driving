@@ -29,20 +29,28 @@ void imgDetector::updateCars(std::string res)
 	}
 	else
 	{
-		this->foundVehicles.clear();//no cars
+		std::vector<object*> temp;
 		std::vector<std::string> objects = this->split(res, "\n");
 		std::vector<std::string> splited;
 		int data[4];
 		for (auto it = objects.begin(); it != objects.end()&&it->size() != 0; it++)
 		{
 			splited = this->split(*it, ",");
-			for (int i = 0; i <= LENGTH; i++)
+			for (int i = 0; i <= HIGHT; i++)
 			{
 				splited[i] = splited[i].substr(1, splited[i].find(".")-1);
 				data[i] = std::stoi(splited[i]);
 			}
 			
-			this->foundVehicles.push_back(new object(data,splited[OBJ]));
+			temp.push_back(new object(data,splited[OBJ]+std::to_string(object::id)));
+		}
+		if (this->foundVehicles.size() > 0)
+		{
+			this->compareVectors(temp, true);
+		}
+		else
+		{
+			this->foundVehicles = temp;
 		}
 	}
 }
@@ -56,32 +64,71 @@ void imgDetector::updateSigns(std::string res)
 	}
 	else
 	{
-		this->foundSigns.clear();//no cars
+		std::vector<object*> temp;
 		std::vector<std::string> objects = this->split(res, "\n");
 		std::vector<std::string> splited;
 		int data[4];
 		for (auto it = objects.begin(); it != objects.end() && it->size() != 0; it++)
 		{
 			splited = this->split(*it, ",");
-			for (int i = 0; i <= LENGTH; i++)
+			for (int i = 0; i <= HIGHT; i++)
 			{
 				splited[i] = splited[i].substr(1, splited[i].find(".") - 1);
 				data[i] = std::stoi(splited[i]);
 			}
 
-			this->foundSigns.push_back(new object(data, splited[OBJ]));
+			temp.push_back(new object(data, splited[OBJ]));
+		}
+		if (this->foundSigns.size() > 0)
+		{
+			this->compareVectors(temp, false);
+		}
+		else
+		{
+			this->foundSigns = temp;
 		}
 	}
 }
 
-std::vector<object*> imgDetector::getFoundVehicles()const
+void imgDetector::compareVectors(std::vector<object*> temp,bool carVector)
 {
-	return this->foundVehicles;
-}
+	const double IUO_THRESHOLD = 0.5;
+	for (auto it = temp.begin(); it != temp.end(); it++)
+	{
+		std::pair<double ,object*>bigIOU;
+		bigIOU.first = 0;
+		for (auto j = this->foundVehicles.begin(); j != this->foundVehicles.end() && carVector; j++)
+		{
+			double iou= (*it)->calcIOU(**j);
+			if (/*(*it)->getName() == (*j)->getName()&&*/ iou>=bigIOU.first)
+			{
+				bigIOU.first = iou;
+				bigIOU.second = *j;
+			}
+		}
+		if (bigIOU.first >= IUO_THRESHOLD)
+		{
+			(*it)->update(*bigIOU.second);//put it
+		}
 
-std::vector<object*> imgDetector::getFoundSigns()const
-{
-	return this->foundSigns;
+		for (auto j = this->foundSigns.begin(); j != this->foundSigns.end() && !carVector; j++)
+		{
+			if ((*it)->getName() == (*j)->getName() && (*it)->calcIOU(**j) >= IUO_THRESHOLD)
+			{
+				(*it)->update(**j);//put it
+				break;
+			}
+		}
+	}
+	if (carVector)
+	{
+		this->foundVehicles = temp;
+	}
+	else
+	{
+		this->foundSigns = temp;
+	}
+
 }
 
 std::vector<std::string> imgDetector::split(std::string str, std::string delim)
