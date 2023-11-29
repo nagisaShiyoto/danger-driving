@@ -608,8 +608,15 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-
+mobylie/mobylie/videos/
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,opencv,python,c++
+/mobylie/mobylie/model_data
+/mobylie/mobylie/models/model_data
+/mobylie/mobylie/models/hub
+/mobylie/mobylie/models/classify
+/mobylie/mobylie/models
+/mobylie/mobylie/best.pt
+/mobylie/mobylie/best1.pt
