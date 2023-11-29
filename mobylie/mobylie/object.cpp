@@ -39,7 +39,7 @@ double object::calcIOU(object& rhs)
     std::pair<int, int> xy2 = getTopLeftPoint(rhs);
     // Calculate the (x, y) coordinates of the intersections
     int x_left = std::max(xy1.first, xy2.first);
-    int y_top = std::max(xy1.second, xy2.second);
+    int y_top = std::min(xy1.second, xy2.second);
     int x_right = std::min(xy1.first + this->getDataImg()[WIDTH], xy2.first + rhs.getDataImg()[WIDTH]);
     int y_bottom = std::max(xy1.second - this->getDataImg()[HIGHT], xy2.second - rhs.getDataImg()[HIGHT]);
 
@@ -55,13 +55,14 @@ double object::calcIOU(object& rhs)
 
     // Calculate IOU
     float iou = static_cast<float>(intersectionArea) / static_cast<float>(unionArea);
-
+    //double iou =  intersectionArea/((box1Area + box2Area) / 2.0);
     return iou;
 }
+
 void object::update(object& rhs)
 {
     this->_name = rhs.getName();
-    this->changeImgData( rhs.getDataImg());
+    //this->changeImgData( rhs.getDataImg());
 }
 
 object& object::operator=(const object& rhs)
