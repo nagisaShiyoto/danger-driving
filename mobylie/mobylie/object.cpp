@@ -55,7 +55,6 @@ double object::calcIOU(object& rhs)
 
     // Calculate IOU
     float iou = static_cast<float>(intersectionArea) / static_cast<float>(unionArea);
-    //double iou =  intersectionArea/((box1Area + box2Area) / 2.0);
     return iou;
 }
 

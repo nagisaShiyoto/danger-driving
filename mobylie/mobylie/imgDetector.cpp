@@ -95,8 +95,6 @@ void imgDetector::compareVectors(std::vector<object*> temp,bool carVector)
 	const double IUO_THRESHOLD = 0.5;
 	for (auto it = temp.begin(); it != temp.end(); it++)
 	{
-		//std::pair<double ,object*>bigIOU;
-		//bigIOU.first = 0;
 		for (auto j = this->foundVehicles.begin(); j != this->foundVehicles.end() && carVector; j++)
 		{
 			double iou= (*it)->calcIOU(**j);
@@ -114,6 +112,7 @@ void imgDetector::compareVectors(std::vector<object*> temp,bool carVector)
 			if ((*it)->getName() == (*j)->getName() && (*it)->calcIOU(**j) >= IUO_THRESHOLD)
 			{
 				(*it)->update(**j);//put it
+				this->foundSigns.erase(j);
 				break;
 			}
 		}
