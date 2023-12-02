@@ -134,12 +134,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="img.cpp" />
     <ClCompile Include="imgDetector.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="vidLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="img.h" />
     <ClInclude Include="imgDetector.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="vidLoader.h" />

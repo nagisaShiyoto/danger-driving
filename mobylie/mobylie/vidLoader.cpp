@@ -1,5 +1,5 @@
 #include "vidLoader.h"
-
+#include <iostream>
 
 vidLoader::vidLoader()
 {
@@ -28,12 +28,15 @@ vidLoader::vidLoader(std::string path)
 
 cv::Mat vidLoader::getNextFrame()
 {
-	this->cap >> this->Currntframe;
-	cv::imwrite(this->frameFileName, this->Currntframe);//save img in file temp
-	return this->Currntframe;
+	cv::Mat tempImg;
+	this->cap >> tempImg;
+	this->Currntframe.changeImg(tempImg);
+	cv::imwrite(this->frameFileName, this->Currntframe.getBgrImg());//save img in file temp	;
+	return this->Currntframe.getBgrImg();
 }
 
-cv::Mat vidLoader::getCurrentFrame()
+img vidLoader::getCurrentFrame()
 {
 	return this->Currntframe;
 }
+

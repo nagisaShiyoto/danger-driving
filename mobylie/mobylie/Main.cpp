@@ -13,10 +13,12 @@ int main() {
         std::string const VIDEO_NAME = "highway1.mp4";
         bool const LIVE = false;
         cv::namedWindow("test", cv::WINDOW_AUTOSIZE);
+        cv::namedWindow("test1", cv::WINDOW_AUTOSIZE);
         cv::VideoCapture cap;
         vidLoader loader("videos/" + VIDEO_NAME);
         //vidLoader loader("");
         cv::Mat frame = loader.getNextFrame();
+
         while (!frame.empty())
         {
             time_t start, end;
@@ -54,6 +56,8 @@ int main() {
             cv::imshow("test", frame);
 
             frame = loader.getNextFrame();
+            loader.getCurrentFrame().printValues();
+            cv::imshow("test1", loader.getCurrentFrame().getHslImg());
 
         }
     }
