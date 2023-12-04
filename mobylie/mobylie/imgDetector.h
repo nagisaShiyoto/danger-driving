@@ -4,6 +4,8 @@
 #include <pybind11/operators.h>
 #include <pybind11/numpy.h>
 #include "object.h"
+#include "Vehicle.h"
+#include "Sign.h"
 #include <vector>
 namespace py = pybind11;
 class imgDetector

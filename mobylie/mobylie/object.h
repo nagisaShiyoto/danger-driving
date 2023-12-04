@@ -7,6 +7,17 @@ enum DATA
 	WIDTH,
 	HIGHT	
 };
+struct vec
+{
+	int x;
+	int y;
+};
+struct data
+{
+	struct vec position;
+	struct vec velocity;
+	struct vec aceloration;
+};
 class object
 {
 public:
@@ -18,8 +29,9 @@ public:
 	void update(object& rhs);
 	object& operator=(const object& rhs);
 	double calcIOU(object& rhs);
+
 private:
 	std::string _name;
-	int _imgData[];
+	int _imgData[4];
 };
 

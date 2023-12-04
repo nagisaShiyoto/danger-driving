@@ -42,7 +42,7 @@ void imgDetector::updateCars(std::string res)
 				data[i] = std::stoi(splited[i]);
 			}
 			
-			temp.push_back(new object(data,splited[OBJ]+std::to_string(object::id)));
+			temp.push_back(new Vehicle(data,splited[OBJ]+std::to_string(object::id)));
 		}
 		if (this->foundVehicles.size() > 0)
 		{
@@ -77,7 +77,7 @@ void imgDetector::updateSigns(std::string res)
 				data[i] = std::stoi(splited[i]);
 			}
 
-			temp.push_back(new object(data, splited[OBJ]));
+			temp.push_back(new Sign(data, splited[OBJ]));
 		}
 		if (this->foundSigns.size() > 0)
 		{
