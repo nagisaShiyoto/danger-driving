@@ -21,8 +21,8 @@ int main() {
 
         while (!frame.empty())
         {
-            time_t start, end;
-            time(&start);
+            clock_t start, end;
+            start = clock();
             std::string CarRes = detector.dettectCar(loader.frameFileName);
             std::string signRes = detector.dettectSign(loader.frameFileName);
             detector.updateCars(CarRes);
@@ -41,12 +41,12 @@ int main() {
 
             }
 
-            time(&end);
+            end=clock();
             
             std::cout
                 <<"\n\n\n\n\n"
                 << "time:"
-                << end - start
+                << double(end - start)/double(CLOCKS_PER_SEC)
                 <<"\n\n\n\n\n";
 
             if (cv::waitKey(30) >= 0)

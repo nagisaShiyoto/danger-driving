@@ -2,8 +2,15 @@
 int object::id = 0;
 object::object(const int imgData[],std::string name)
 {
+    vec zeroVec;
+    zeroVec.x = 0;
+    zeroVec.y = 0;
 	this->changeImgData(imgData);
 	this->_name = name;
+    this->_lastCheck = clock();
+    this->_objectData.aceloration = zeroVec;
+    this->_objectData.velocity = zeroVec;
+    this->_objectData.position= zeroVec;
     object::id++;
 
 }
@@ -58,15 +65,64 @@ double object::calcIOU(object& rhs)
     return iou;
 }
 
-void object::update(object& rhs)
+vec object::getNewVec(vec newState, vec oldState,int new_time)
 {
-    this->_name = rhs.getName();
-    //this->changeImgData( rhs.getDataImg());
+    vec vel;
+    double dt = (new_time - this->_lastCheck)/double(CLOCKS_PER_SEC);
+    vel.x = double(newState.x - oldState.x) / dt;
+    vel.y = double(newState.y - oldState.y) / dt;
+    return vel;
 }
 
-object& object::operator=(const object& rhs)
+void object::updateVel(vec vel)
 {
-	//mybe adding check if they are the same name
-	object temp(rhs._imgData, rhs.getName());
-	return temp;
+    this->_objectData.velocity = vel;
+}
+
+void object::updateAcc(vec acc)
+{
+    this->_objectData.aceloration = acc;
+}
+
+void object::updatePos(vec pos)
+{
+    this->_objectData.position.x = pos.x;
+    this->_objectData.position.y = pos.y;
+}
+
+data object::getObjectData()
+{
+    return this->_objectData;
+}
+
+void object::update(object& rhs)
+//put rhs in this
+//this-the new object
+//rhs -the oldobject 
+{
+    clock_t newT = clock();
+    this->_name = rhs.getName();
+    ///////////////////////////test//////////////////////////////////
+    this->_objectData.position.x = object::id * 2;
+    this->_objectData.position.y = object::id * 2+1;
+    ///////////////////////////test//////////////////////////////////
+    if (rhs.getObjectData().position.x != 0 || rhs.getObjectData().position.y != 0)
+    {
+        vec vel = rhs.getNewVec(this->getObjectData().position,rhs.getObjectData().position, newT);
+        if (rhs.getObjectData().velocity.x != 0 || rhs.getObjectData().velocity.y != 0)//if he has vel we can calc the acc
+        {
+            this->updateAcc(rhs.getNewVec(vel,rhs.getObjectData().velocity,newT));
+        }
+        this->updateVel(vel);
+    }
+    ///////////////////////////test//////////////////////////////////
+    std::cout
+        <<"\n" << "---------------------------------" << this->_name << "--------------------------------"
+        <<"\n" << this->_objectData.position.x << " " << this->_objectData.position.y
+        << "\n" << this->_objectData.velocity.x << " " << this->_objectData.velocity.y
+        << "\n" << this->_objectData.aceloration.x << " " << this->_objectData.aceloration.y
+        ;
+    ///////////////////////////test//////////////////////////////////
+    newT = clock();
+    this->_lastCheck = newT;//update the time
 }
