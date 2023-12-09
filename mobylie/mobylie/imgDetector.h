@@ -16,10 +16,14 @@ public:
 	std::string dettectCar(std::string imgName);
 	void updateCars(std::string);
 	void updateSigns(std::string);
+	void updateOurCar();
+	object getOurCar();
 	std::vector<object*> foundVehicles;
 	std::vector<object*> foundSigns;
 
+
 private:
+	object _ourCar;
 	void compareVectors(std::vector<object*> temp,bool carVector);
 	std::vector<std::string> split(std::string str, std::string delim);
 	pybind11::scoped_interpreter* _interpreter2;

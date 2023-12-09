@@ -22,11 +22,15 @@ int main() {
         while (!frame.empty())
         {
             clock_t start, end;
-            start = clock();
+            start = clock();//test
             std::string CarRes = detector.dettectCar(loader.frameFileName);
             std::string signRes = detector.dettectSign(loader.frameFileName);
             detector.updateCars(CarRes);
             detector.updateSigns(signRes);
+            detector.updateOurCar();
+
+
+            ////////////////////////////////////////////test/////////////////////////////////////////////////////////////////
             for (auto it = detector.foundVehicles.begin(); it != detector.foundVehicles.end(); it++)
             {
                 int* data = (*it)->getDataImg();
@@ -41,8 +45,18 @@ int main() {
 
             }
 
+            ///////////////////////////test//////////////////////////////////
+            std::cout
+                << "\n" << "---------------------------------" << "ourCar" << "--------------------------------"
+                << "\n" << detector.getOurCar().getObjectData().position.x << " " << detector.getOurCar().getObjectData().position.y
+                << "\n" << detector.getOurCar().getObjectData().velocity.x << " " << detector.getOurCar().getObjectData().velocity.y
+                << "\n" << detector.getOurCar().getObjectData().aceloration.x << " " << detector.getOurCar().getObjectData().aceloration.y
+                ;
+            ///////////////////////////test//////////////////////////////////
+            
             end=clock();
             
+
             std::cout
                 <<"\n\n\n\n\n"
                 << "time:"
@@ -58,7 +72,7 @@ int main() {
             frame = loader.getNextFrame();
             loader.getCurrentFrame().printValues();
             cv::imshow("test1", loader.getCurrentFrame().getHslImg());
-
+            ////////////////////////////////////////////test/////////////////////////////////////////////////////////////////
         }
     }
     catch (const py::error_already_set& e) {

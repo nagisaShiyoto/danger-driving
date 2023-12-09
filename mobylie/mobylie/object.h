@@ -7,10 +7,13 @@ enum DATA
 	WIDTH,
 	HIGHT	
 };
-struct vec
+class vec
 {
+public:
 	double x;
 	double y;
+	vec& operator+=(vec const& rhs);
+	vec operator/(int const& rhs) const;
 };
 struct data
 {
@@ -22,7 +25,9 @@ class object
 {
 public:
 	static int id;
+	static data getZeroData();
 	object(const int imgData[],std::string name);
+	object();
 	void changeImgData(const int imgData[]);
 	int* getDataImg();
 	std::string getName()const;
@@ -30,7 +35,7 @@ public:
 	void updateAcc(vec acc);
 	void updatePos(vec pos);
 	data getObjectData();
-
+	vec getDistance();
 
 	void update(object& rhs);
 
@@ -42,6 +47,7 @@ public:
 private:
 	clock_t _lastCheck;
 	data _objectData;
+	vec _distnacedMade;
 	std::string _name;
 	int _imgData[4];
 };

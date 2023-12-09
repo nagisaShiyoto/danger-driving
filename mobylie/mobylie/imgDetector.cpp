@@ -90,6 +90,46 @@ void imgDetector::updateSigns(std::string res)
 	}
 }
 
+void imgDetector::updateOurCar()
+{
+	data sum = object::getZeroData();
+	int posNonZeroCounter = 0;
+	int velNonZeroCounter = 0;
+	int accNonZeroCounter = 0;
+	for (auto it = this->foundSigns.begin(); it != this->foundSigns.end(); it++)
+	{
+		if ((*it)->getDistance().x != 0 || (*it)->getDistance().y != 0)
+		{
+			sum.position += (*it)->getDistance();
+			posNonZeroCounter++;
+		}
+		if ((*it)->getObjectData().velocity.x != 0 || (*it)->getObjectData().velocity.y != 0)
+		{
+			sum.velocity += (*it)->getObjectData().velocity;
+			velNonZeroCounter++;
+		}
+		if ((*it)->getObjectData().aceloration.x != 0 || (*it)->getObjectData().aceloration.y != 0)
+		{
+			sum.aceloration += (*it)->getObjectData().aceloration;
+			accNonZeroCounter++;
+		}
+	}
+	if (posNonZeroCounter == 0)
+	{
+		return;
+	}
+	sum.position = sum.position / posNonZeroCounter;
+	sum.position += this->_ourCar.getObjectData().position;
+	this->_ourCar.updatePos(sum.position);
+	this->_ourCar.updateVel(sum.velocity /velNonZeroCounter);
+	this->_ourCar.updateAcc(sum.aceloration / accNonZeroCounter);
+}
+
+object imgDetector::getOurCar()
+{
+	return this->_ourCar;
+}
+
 void imgDetector::compareVectors(std::vector<object*> temp,bool carVector)
 {
 	const double IUO_THRESHOLD = 0.5;

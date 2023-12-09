@@ -1,5 +1,16 @@
 #include "object.h"
 int object::id = 0;
+data object::getZeroData()
+{
+    data temp;
+    vec zeroVec;
+    zeroVec.x = 0;
+    zeroVec.y = 0;
+    temp.aceloration = zeroVec;
+    temp.velocity = zeroVec;
+    temp.position = zeroVec;
+    return temp;
+}
 object::object(const int imgData[],std::string name)
 {
     vec zeroVec;
@@ -8,13 +19,20 @@ object::object(const int imgData[],std::string name)
 	this->changeImgData(imgData);
 	this->_name = name;
     this->_lastCheck = clock();
-    this->_objectData.aceloration = zeroVec;
-    this->_objectData.velocity = zeroVec;
-    this->_objectData.position= zeroVec;
+    this->_objectData = object::getZeroData();
+    this->_distnacedMade = zeroVec;
     object::id++;
+    ///////////////////////////test//////////////////////////////////
+    this->_objectData.position.x = object::id * 2;
+    this->_objectData.position.y = object::id * 2 + 1;
+    ///////////////////////////test//////////////////////////////////
 
 }
-
+object::object()
+{
+    int img_data[] = { 0, 0, 0, 0 };
+    object(img_data, "ourCar");
+}
 void object::changeImgData(const int imgData[])
 {
 	this->_imgData[X] = imgData[X];
@@ -95,17 +113,22 @@ data object::getObjectData()
     return this->_objectData;
 }
 
+vec object::getDistance()
+{
+    return this->_distnacedMade;
+}
+
 void object::update(object& rhs)
 //put rhs in this
 //this-the new object
-//rhs -the oldobject 
+//rhs -the old object 
 {
     clock_t newT = clock();
     this->_name = rhs.getName();
-    ///////////////////////////test//////////////////////////////////
-    this->_objectData.position.x = object::id * 2;
-    this->_objectData.position.y = object::id * 2+1;
-    ///////////////////////////test//////////////////////////////////
+
+    this->_distnacedMade.x = this->_objectData.position.x - rhs.getObjectData().position.x;
+    this->_distnacedMade.y = this->_objectData.position.y - rhs.getObjectData().position.y;
+    //check if position exist
     if (rhs.getObjectData().position.x != 0 || rhs.getObjectData().position.y != 0)
     {
         vec vel = rhs.getNewVec(this->getObjectData().position,rhs.getObjectData().position, newT);
@@ -117,12 +140,29 @@ void object::update(object& rhs)
     }
     ///////////////////////////test//////////////////////////////////
     std::cout
-        <<"\n" << "---------------------------------" << this->_name << "--------------------------------"
-        <<"\n" << this->_objectData.position.x << " " << this->_objectData.position.y
-        << "\n" << this->_objectData.velocity.x << " " << this->_objectData.velocity.y
-        << "\n" << this->_objectData.aceloration.x << " " << this->_objectData.aceloration.y
+        << "\n" << "---------------------------------" << this->_name << "--------------------------------"
+        << "\n" << this->_distnacedMade.x << " " << this->_distnacedMade.y
+        << "\n" << this->_objectData.position.x << " " << this->_objectData.position.y << " " << rhs.getObjectData().position.x << " " << rhs.getObjectData().position.y
+        << "\n" << this->_objectData.velocity.x << " " << this->_objectData.velocity.y << " " << rhs.getObjectData().velocity.x << " " << rhs.getObjectData().velocity.y
+        << "\n" << this->_objectData.aceloration.x << " " << this->_objectData.aceloration.y << " " << rhs.getObjectData().aceloration.x << " " << rhs.getObjectData().aceloration.y
         ;
     ///////////////////////////test//////////////////////////////////
+
     newT = clock();
     this->_lastCheck = newT;//update the time
+}
+
+vec& vec::operator+=(vec const& rhs)
+{
+    this->x += rhs.x;
+    this->y += rhs.y;
+    return *this;
+}
+
+vec vec::operator/(int const& rhs) const
+{
+    vec temp;
+    temp.x = this->x / rhs;
+    temp.y = this->y / rhs;
+    return temp;
 }
