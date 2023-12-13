@@ -3,10 +3,54 @@
 #include "imgDetector.h"
 #include "vidLoader.h"
 //////////////////general includes//////////////////
-
+#include <torch/torch.h>
+#include <torch/script.h>
 #include <opencv2/opencv.hpp>
 
 int main() {
+    // Load the image
+    cv::Mat image = cv::imread("C:/Users/test0/OneDrive/שולחן העבודה/magshimim/eylon_yotam_project/mobylie/mobylie/tempFile.png");
+
+    // Preprocess the image
+    cv::resize(image, image, cv::Size(640, 640));
+    cv::cvtColor(image, image, cv::COLOR_BGR2RGB);
+    image.convertTo(image, CV_32FC3);
+
+    // Normalize the image
+    image /= 255.0;
+    //image -= torch::tensor({ 0.485, 0.456, 0.406 });
+    //image /= torch::tensor({ 0.229, 0.224, 0.225 });
+
+    // Load the model
+    try {
+        torch::jit::Module model = torch::jit::load("C:/Users/test0/Downloads/idkk/yolov5cc.pt");
+        // ...
+
+        clock_t start, end;
+        start = clock();//test
+        torch::Tensor input = torch::from_blob(image.data, torch::IntList({ 1, 3, 640, 640 }), torch::kFloat32);
+
+        torch::Tensor output = model.forward({input}).toTuple()->elements()[0].toTensor();
+        end = clock();
+
+
+        std::cout
+            << "\n\n\n\n\n"
+            << "time:"
+            << double(end - start) / double(CLOCKS_PER_SEC)
+            << "\n\n\n\n\n";
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Error loading model: " << e.what() << std::endl;
+    }
+
+
+
+
+
+
+
+
     try
     {
         imgDetector detector;
@@ -78,6 +122,11 @@ int main() {
     catch (const py::error_already_set& e) {
         std::cerr << "Pythonn error: " << e.what() << std::endl;
     }
+    catch (const std::exception& e) {
+        std::cerr << "Error loading model: " << e.what() << std::endl;
+    }
+    
+
     cv::destroyAllWindows();
     return 0;
 }

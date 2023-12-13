@@ -108,13 +108,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\test0\AppData\Local\Programs\Python\Python39\lib\site-packages\pybind11\include;C:\Users\test0\AppData\Local\Programs\Python\Python39;C:\Users\test0\AppData\Local\Programs\Python\Python39\include;C:\Users\test0\OneDrive\שולחן העבודה\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\test0\OneDrive\שולחן העבודה\magshimim\eylon_yotam_project\libtorch\include\torch\csrc\api\include;C:\Users\test0\OneDrive\שולחן העבודה\magshimim\eylon_yotam_project\libtorch\include;C:\Users\test0\AppData\Local\Programs\Python\Python39\lib\site-packages\pybind11\include;C:\Users\test0\AppData\Local\Programs\Python\Python39;C:\Users\test0\AppData\Local\Programs\Python\Python39\include;C:\Users\test0\OneDrive\שולחן העבודה\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\test0\venv\Lib\site-packages;C:\Users\test0\AppData\Local\Programs\Python\Python39\libs;C:\Users\test0\OneDrive\שולחן העבודה\opencv\build\x64\vc15\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_world400d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\test0\OneDrive\שולחן העבודה\magshimim\eylon_yotam_project\libtorch\lib;C:\Users\test0\venv\Lib\site-packages;C:\Users\test0\AppData\Local\Programs\Python\Python39\libs;C:\Users\test0\OneDrive\שולחן העבודה\opencv\build\x64\vc15\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_world400d.lib;torch.lib;torch_cpu.lib;c10.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
