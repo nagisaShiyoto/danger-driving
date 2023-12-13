@@ -41,7 +41,7 @@ public:
 
 	double calcIOU(object& rhs);
 	vec getNewVec(vec newState, vec oldState,int new_time);
-
+	static vec calculate_distance_from_object(object& a, int angle1, object& b, int angle2, vec velocity);
 
 	
 private:

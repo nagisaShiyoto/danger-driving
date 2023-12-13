@@ -1,4 +1,6 @@
 #include "object.h"
+#include <cmath>
+
 int object::id = 0;
 data object::getZeroData()
 {
@@ -90,6 +92,30 @@ vec object::getNewVec(vec newState, vec oldState,int new_time)
     vel.x = double(newState.x - oldState.x) / dt;
     vel.y = double(newState.y - oldState.y) / dt;
     return vel;
+}
+
+/*
+the function calcualtes the distance from a object
+
+
+*/
+vec object::calculate_distance_from_object(object& a, int angle1, object& b, int angle2, vec velocity)
+{
+    double m1 = tan(angle1);
+    double m2 = tan(angle2); // Error on this line: you should subtract the Direction but I coudn't find where this os stored
+
+    //Using the point - slope form : y - y1 = m1(x - x1) and y - y2 = m2(x - x2)
+    //Rearranging these equations to the form of y = mx + c
+    double c1 = a.getDistance().y - m1 * a.getDistance().x;
+    double c2 = b.getDistance().y - m2 * b.getDistance().x;
+
+    //Solving the two linear equations
+    //y = m1 * x + c1 and y = m2 * x + c2    
+    //m1 * x + c1 = m2 * x + c2 = > x = (c2 - c1) / (m1 - m2)
+    double x3 = (c2 - c1) / (m1 - m2);
+    double y3 = m1 * x3 + c1;
+    
+    return vec();
 }
 
 void object::updateVel(vec vel)
