@@ -53,9 +53,9 @@ from utils.torch_utils import select_device, smart_inference_mode
 
 
 @smart_inference_mode()
-def run(path):
+def detectSign(img):
     try:
-        weights='best.pt'  # model path or triton URL
+        weights='wieghts/best.pt'  # model path or triton URL
         #source=ROOT / 'data/images'  # file/dir/URL/glob/screen/0(webcam)
         data=ROOT / 'data/coco128.yaml'  # dataset.yaml path
         imgsz=(640, 640)  # inference size (height, width)
@@ -71,8 +71,7 @@ def run(path):
         max_det=1000  # maximum detections per image
         iou_thres=0.45  # NMS IOU threshold
         conf_thres=0.25  # confidence threshold, pretty low confidence(work for now)
-        strides=32
-        source = path
+
         # Load model
         device = select_device(device)
         model = DetectMultiBackend(weights, device=device, dnn=dnn, data=data, fp16=half)
@@ -81,50 +80,49 @@ def run(path):
 
         # Dataloader
         bs = 1  # batch_size
-        dataset = LoadImages(source, img_size=imgsz, stride=stride, auto=pt, vid_stride=vid_stride)
+        dataset = LoadImages(img, img_size=imgsz, stride=stride)
         # Run inference
         model.warmup(imgsz=(1 if pt or model.triton else bs, 3, *imgsz))  # warmup
         seen, windows, dt = 0, [], (Profile(), Profile(), Profile())
-        for path, im, im0s, vid_cap, s in dataset:
-            with dt[0]:
-                im = torch.from_numpy(im).to(model.device)
-                im = im.half() if model.fp16 else im.float()  # uint8 to fp16/32
-                im /= 255  # 0 - 255 to 0.0 - 1.0
-                if len(im.shape) == 3:
-                    im = im[None]  # expand for batch dim
+        
+        im, im0s = dataset.im,dataset.im0
+        with dt[0]:
+            im = torch.from_numpy(im).to(model.device)
+            im = im.half() if model.fp16 else im.float()  # uint8 to fp16/32
+            im /= 255  # 0 - 255 to 0.0 - 1.0
+            if len(im.shape) == 3:
+                im = im[None]  # expand for batch dim
 
-            # Inference
-            with dt[1]:
-                pred = model(im, augment=augment, visualize=visualize)
+        # Inference
+        with dt[1]:
+            pred = model(im, augment=augment, visualize=visualize)
 
-            # NMS
-            with dt[2]:
-                pred = non_max_suppression(pred, conf_thres, iou_thres, classes, agnostic_nms, max_det=max_det)
-            # Process predictions
-            for i, det in enumerate(pred):  # per image
-                seen += 1
-                p, im0, frame = path, im0s.copy(), getattr(dataset, 'frame', 0)
+        # NMS
+        with dt[2]:
+            pred = non_max_suppression(pred, conf_thres, iou_thres, classes, agnostic_nms, max_det=max_det)
+        # Process predictions
+        for i, det in enumerate(pred):  # per image
+            seen += 1
+            im0=im0s.copy()
+            #s += '%gx%g ' % im.shape[2:]  # print string
+            if len(det):
+                # Rescale boxes from img_size to im0 size
+                det[:, :4] = scale_boxes(im.shape[2:], det[:, :4], im0.shape).round()
 
-                p = Path(p)  # to Path
-                s += '%gx%g ' % im.shape[2:]  # print string
-                if len(det):
-                    # Rescale boxes from img_size to im0 size
-                    det[:, :4] = scale_boxes(im.shape[2:], det[:, :4], im0.shape).round()
-
-                    # Print results
-                    for c in det[:, 5].unique():
-                        n = (det[:, 5] == c).sum()  # detections per class
-                        s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  # add to string
-                    # Write results
-                    result=""
-                    for *xyxy, conf, cls in reversed(det):
-                        c = int(cls)  # integer class
-                        label = names[c] if hide_conf else f'{names[c]}'
-                        confidence = float(conf)
-                        confidence_str = f'{confidence:.2f}'
-                        xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) ).view(-1).tolist()  # normalized xywh
-                        result+=str(xywh)+","+label+"\n"
-                    return result
+                # Print results
+                #for c in det[:, 5].unique():
+                #    n = (det[:, 5] == c).sum()  # detections per class
+                #    #s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  # add to string
+                # Write results
+                result=""
+                for *xyxy, conf, cls in reversed(det):
+                    c = int(cls)  # integer class
+                    label = names[c] if hide_conf else f'{names[c]}'
+                    confidence = float(conf)
+                    confidence_str = f'{confidence:.2f}'
+                    xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) ).view(-1).tolist()  # normalized xywh
+                    result+=str(xywh)+","+label+"\n"
+                return result
         return "not found"
     except ValueError:
         return ValueError
@@ -164,11 +162,7 @@ def parse_opt():
     return opt
 
 
-def main(opt):
-    #check_requirements(ROOT / 'requirements.txt', exclude=('tensorboard', 'thop'))
-    run()
-
 
 if __name__ == '__main__':
     #opt = parse_opt()
-    print(run("tempFile.png"))
+    print(detectSign(cv2.imread("test1.jpg")))
