@@ -611,6 +611,7 @@ FodyWeavers.xsd
 
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
-code/videos/
-code/weights/
+mobylie/src/videos/
+mobylie/models/weights/
+venv/
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,opencv,python,c++
