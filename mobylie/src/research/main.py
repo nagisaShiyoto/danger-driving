@@ -1,4 +1,4 @@
-from detect import detectCar
+from CarDetection import detectCar
 from SignDetection import detectSign
 import cv2
 def main():
