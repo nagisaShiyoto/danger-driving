@@ -120,8 +120,8 @@ def scale_image(im1_shape, masks, im0_shape, ratio_pad=None):
 
 def mask_iou(mask1, mask2, eps=1e-7):
     """
-    mask1: [N, n] m1 means number of predicted objects
-    mask2: [M, n] m2 means number of gt objects
+    mask1: [N, n] m1 means number of predicted obj
+    mask2: [M, n] m2 means number of gt obj
     Note: n means image_w x image_h
 
     return: masks iou, [N, M]
@@ -133,8 +133,8 @@ def mask_iou(mask1, mask2, eps=1e-7):
 
 def masks_iou(mask1, mask2, eps=1e-7):
     """
-    mask1: [N, n] m1 means number of predicted objects
-    mask2: [N, n] m2 means number of gt objects
+    mask1: [N, n] m1 means number of predicted obj
+    mask2: [N, n] m2 means number of gt obj
     Note: n means image_w x image_h
 
     return: masks iou, (N, )

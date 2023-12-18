@@ -16,13 +16,14 @@ def main():
         dettector.updateSign(signRes)
         ################################test###################################
         for car in dettector.carArray:
-            top_left=(car.x-car.width,car.y+car.hight)
-            bottom_right=(car.x+car.width,car.y-car.hight)
 
-            box=cv2.Rect(top_left,bottom_right)
-            cv2.rectangle(loader._img._bgrImg,box,(255,0,0),1)
+            top_left=car.bounding_box.getTopLeftPoint(car.bounding_box.x,car.bounding_box.y,car.bounding_box.width,car.bounding_box.length)
+            bottom_right=car.bounding_box.getBottomRightPoint(car.bounding_box.x,car.bounding_box.y,car.bounding_box.width,car.bounding_box.length)
+            intTopLeft=(int(top_left[0]),int(top_left[1]))#parse from float to int
+            intBottomRight=(int(bottom_right[0]),int(bottom_right[1]))#parse from float to int
+            cv2.rectangle(loader._img._bgrImg,intTopLeft,intBottomRight,(255,0,0),1)
 
-            text_position = (top_left[0], top_left[1] + 10)
+            text_position = (intTopLeft[0], intBottomRight[1]-10)
             font_face = cv2.FONT_HERSHEY_SIMPLEX
             font_scale = 0.5
             text_color = (255, 0, 0)

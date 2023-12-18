@@ -85,7 +85,7 @@ class CometLogger:
         self.upload_dataset = self.opt.upload_dataset or COMET_UPLOAD_DATASET
         self.resume = self.opt.resume
 
-        # Default parameters to pass to Experiment objects
+        # Default parameters to pass to Experiment obj
         self.default_experiment_kwargs = {
             'log_code': False,
             'log_env_gpu': True,

@@ -826,7 +826,7 @@ class Detections:
         return new
 
     def tolist(self):
-        # return a list of Detections objects, i.e. 'for result in results.tolist():'
+        # return a list of Detections obj, i.e. 'for result in results.tolist():'
         r = range(self.n)  # iterable
         x = [Detections([self.ims[i]], [self.pred[i]], [self.files[i]], self.times, self.names, self.s) for i in r]
         # for d in x:
