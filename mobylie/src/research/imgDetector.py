@@ -44,7 +44,33 @@ class imgDetector:
             self.copySignArr(signs)
 
     def updateOurCar(self):
-        print("i dont know what or how you want to do it we will do it tommorow")
+        sum = obj.Data(obj.Vec(0,0),obj.Vec(0,0),obj.Vec(0,0))
+        posNonZeroCounter = 0
+        velNonZeroCounter = 0
+        accNonZeroCounter = 0
+        #adds them up to have the avg
+        for sign in self.signArray:
+            if sign.data.position.x != 0 and sign.data.position.y != 0:
+                sum.position+=sign.data.position
+                posNonZeroCounter+=1
+            if sign.data.velocity.x != 0 and sign.data.velocity.y != 0:
+                sum.velocity+=sign.data.velocity
+                velNonZeroCounter+=1
+            if sign.data.aceloration.x != 0 and sign.data.aceloration.y != 0:
+                sum.aceloration+=sign.data.aceloration
+                posNonZeroCounter+=1
+        try:
+            #calc avg
+            sum.position.x=sum.position.x/posNonZeroCounter
+            sum.position.y=sum.position.y/posNonZeroCounter
+            self.ourCar.data.position+=sum.position
+            self.ourCar.data.velocity.x=sum.velocity.x/velNonZeroCounter
+            self.ourCar.data.velocity.y=sum.velocity.y/velNonZeroCounter
+            self.ourCar.data.aceloration.x=sum.aceloration.x/accNonZeroCounter
+            self.ourCar.data.aceloration.y=sum.aceloration.y/accNonZeroCounter
+        except ZeroDivisionError:
+            #if there wasnt enough information to calc it
+            print("zero info")
 
     def compareList(self,temp,carVector):
         IUO_THRESHOLD=0.5

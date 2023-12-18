@@ -14,6 +14,7 @@ def main():
         signRes=detectSign((loader._img._bgrImg))
         dettector.updateCar(carRes)
         dettector.updateSign(signRes)
+        dettector.updateOurCar()
         ################################test###################################
         for car in dettector.carArray:
 
