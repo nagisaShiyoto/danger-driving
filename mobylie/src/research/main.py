@@ -7,7 +7,7 @@ import time
 
 
 def main():
-    loader = videoLoader.VideoLoader("../videos/highway1.mp4")
+    loader = videoLoader.VideoLoader("../videos/500.mp4")
     dettector = imgDetector.imgDetector()
     while loader.nextFrame():
         start_time = time.time()
@@ -43,7 +43,10 @@ def main():
         print((dettector.ourCar.data.velocity.x, dettector.ourCar.data.velocity.y))
         print((dettector.ourCar.data.aceloration.x, dettector.ourCar.data.aceloration.y))
         ########################test############################
+       # print(dettector.calcDistanceWay1(dettector.carArray[0].bounding_box.length,1))
 
+
+        ########################test############################
         end_time = time.time()
         print("time:")
         print(end_time - start_time)

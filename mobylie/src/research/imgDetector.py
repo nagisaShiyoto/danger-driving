@@ -45,7 +45,9 @@ class imgDetector:
             self.compareList(signs, False)
         else:
             self.copySignArr(signs)
-
+    def calcDistanceWay1(self, pixels_length, real_length):
+        focal_length=24
+        return ((focal_length * pixels_length) / 1300)
     def updateOurCar(self):
         sum = obj.Data(obj.Vec(0, 0), obj.Vec(0, 0), obj.Vec(0, 0))
         posNonZeroCounter = 0
