@@ -1,4 +1,4 @@
-import mobylie.src.research.obj.Bounding_Box as Bounding_Box
+import src.research.obj.Bounding_Box as Bounding_Box
 import time  # the class for the time management
 
 class Vec:

@@ -7,7 +7,7 @@ import time
 
 
 def main():
-    loader = videoLoader.VideoLoader("../videos/500.mp4")
+    loader = videoLoader.VideoLoader("C:/Programimgs/magshimim/Eylon My Beloved/eylon_yotam_project/mobylie/videos/highway1.mp4")
     dettector = imgDetector.imgDetector()
     while loader.nextFrame():
         start_time = time.time()
@@ -52,7 +52,7 @@ def main():
         print(end_time - start_time)
 
         cv2.imshow("bgr", loader._img._bgrImg)
-        cv2.imshow("hsl", loader._img._hlsImg)
+        #cv2.imshow("hsl", loader._img._hlsImg)
         if cv2.waitKey(1) == ord('q'):
             break
 
