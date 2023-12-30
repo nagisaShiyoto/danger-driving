@@ -1,5 +1,7 @@
-from src.research.obj import Bounding_Box
-from src.research.obj import General_Object as obj
+#from src.research.obj import Bounding_Box
+#from src.research.obj import General_Object as obj
+from mobylie.src.research.obj import Bounding_Box
+from mobylie.src.research.obj import General_Object as obj
 
 
 class imgDetector:

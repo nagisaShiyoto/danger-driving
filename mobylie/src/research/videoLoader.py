@@ -27,58 +27,75 @@ class VideoLoader:
             return False
         self._img = Img(frame)
         return True
+    def showSegmentation(self,carVec):
 
+        pic=self._img._bgrImg
+        rowCounter=0
+        colCounter=0
+        self.segmentation(carVec)
+        print(self.answers_array)
+        while rowCounter < pic.shape[0]:
+            colCounter=0
+            while colCounter<pic.shape[1]:
+                if(self.answers_array[rowCounter, colCounter]==1):
+                    pic[rowCounter, colCounter]=(255,255,255)
+                else:
+                    pic[rowCounter, colCounter]=(0,0,0)
+                colCounter+=1
+            rowCounter+=1
+        return pic
     def segmentation(self, carVec):
         points_of_interest = self.find_points_of_interest(carVec)
-
-        self.check_array = numpy.zeros(self._hlsImg.shape()[0], self._hlsImg.shape()[1])
-        self.answers_array = numpy.zeros(self._hlsImg.shape()[0], self._hlsImg.shape()[1])
+        (height,length,place)= self._img._hlsImg.shape
+        self.check_array = numpy.zeros((height,length),dtype=int)
+        self.answers_array = numpy.zeros((height,length),dtype=int)
 
         # points_of_interest is an array of tuples representing points
         for point in points_of_interest:
-            self.check_pixel(point[1], point[2], (-1, -1, -1))
+            self.check_pixel(point[0], point[1],(-1,-1,-1),True)
 
 
 
-    def check_pixel(self, i, j, last_pixel_BGR):
-        if(i > 0 & j > 0 & (i < self._hlsImg.shape()[0]) & (j < self._hlsImg.shape()[1])):
-            if self.check_array[i][j] == 0: # if it wan't checked already
-                self.check_array[i][j] = 1
+    def check_pixel(self, i, j_Float, last_pixel_BGR,firstPixel):
+        j = int(j_Float)
+        if i > 0 and j > 0 \
+                and (i < self._img._hlsImg.shape[0]) \
+                and (j < self._img._hlsImg.shape[1]):
+            if self.check_array[i, j] == 0: # if it wan't checked already
+                self.check_array[i,j] = 1
 
-                HSL_values = self._hlsImg[i][j]
+                HLS_values = self._img._hlsImg[i,j]
 
                 # determining the hsl threshold
                 s_threshold = 10
-                l_threshold = 40 - HSL_values[1] * 2
-
+                l_threshold = 25
+                print(l_threshold)
                 #checking if the hsl is matching
-                if((HSL_values[1] < s_threshold) & HSL_values[2] < l_threshold):
+                if((HLS_values[2] < s_threshold) & HLS_values[1] < l_threshold):
                     #at this point the pixel itself is clear. we need to check it's neighbors
-
                     #if it's the first pixel in the chain we will send the RGB tuple as -1,-1,-1
-                    if ((last_pixel_BGR[0] == -1)&(last_pixel_BGR[1] == -1)&(last_pixel_BGR[2] == -1)):
+                    if firstPixel:
                         self.answers_array[i][j] = 1
-
                         # checking the same thing for all of the adjacent pixels
-                        self.check_pixel(i - 1, j, (self._bgrImg[i][j]))
-                        self.check_pixel(i + 1, j, (self._bgrImg[i][j]))
-                        self.check_pixel(i, j - 1, (self._bgrImg[i][j]))
-                        self.check_pixel(i, j + 1, (self._bgrImg[i][j]))
+                        self.check_pixel(i - 1, j, (self._img._bgrImg[i,j]),False)
+                        self.check_pixel(i + 1, j, (self._img._bgrImg[i,j]),False)
+                        self.check_pixel(i, j - 1, (self._img._bgrImg[i,j]),False)
+                        self.check_pixel(i, j + 1, (self._img._bgrImg[i,j]),False)
 
                     #otherwise
                     else:
-                        b_offset = abs((self._bgrImg[i][j])[0] - last_pixel_BGR[0])
-                        g_offset = abs((self._bgrImg[i][j])[1] - last_pixel_BGR[1])
-                        r_offset = abs((self._bgrImg[i][j])[2] - last_pixel_BGR[2])
 
-                        if(b_offset < 10 & g_offset < 10 & r_offset < 10):
-                            self.answers_array[i][j] = 1
-
+                        b_offset = abs((self._img._bgrImg[i,j])[0] - last_pixel_BGR[0])
+                        g_offset = abs((self._img._bgrImg[i,j])[1] - last_pixel_BGR[1])
+                        r_offset = abs((self._img._bgrImg[i,j])[2] - last_pixel_BGR[2])
+                        print(b_offset,r_offset,g_offset)
+                        if(b_offset < 10 and g_offset < 10 and r_offset < 10):
+                            self.answers_array[i, j] = 1
                             # checking the same thing for all of the adjacent pixels
-                            self.check_pixel(i - 1, j, (self._bgrImg[i][j]))
-                            self.check_pixel(i + 1, j, (self._bgrImg[i][j]))
-                            self.check_pixel(i, j - 1, (self._bgrImg[i][j]))
-                            self.check_pixel(i, j + 1, (self._bgrImg[i][j]))
+                            self.check_pixel(i + 1, j, (self._img._bgrImg[i,j]),False)
+                            self.check_pixel(i - 1, j, (self._img._bgrImg[i,j]),False)
+                            self.check_pixel(i, j - 1, (self._img._bgrImg[i,j]),False)
+                            self.check_pixel(i, j + 1, (self._img._bgrImg[i,j]),False)
 
     def find_points_of_interest(self, carVec):
         points_of_interest = []
@@ -87,8 +104,8 @@ class VideoLoader:
 
             i = 0
             while i < car.bounding_box.width:
-                y = car.bounding_box.y - (car.bounding_box.hight / 2)
+                y = car.bounding_box.y - (car.bounding_box.length / 2)
                 x = car.bounding_box.x + i
                 i += 1
-
                 points_of_interest.append((x, y))
+        return points_of_interest
