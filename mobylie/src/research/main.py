@@ -47,12 +47,12 @@ def main():
 
 
         ########################test############################
+
+        cv2.imshow("bgr", loader._img._bgrImg)
+        cv2.imshow("hsl", loader._img._hlsImg)
         end_time = time.time()
         print("time:")
         print(end_time - start_time)
-        cv2.imshow("error",loader.showSegmentation(dettector.carArray))
-        cv2.imshow("bgr", loader._img._bgrImg)
-        cv2.imshow("hsl", loader._img._hlsImg)
         if cv2.waitKey(1) == ord('q'):
             break
 
