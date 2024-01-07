@@ -49,7 +49,7 @@ def main():
         ########################test############################
 
         cv2.imshow("bgr", loader._img._bgrImg)
-        cv2.imshow("hsl", loader._img._hlsImg)
+        #cv2.imshow("hsl", loader._img._hlsImg)
         end_time = time.time()
         print("time:")
         print(end_time - start_time)

@@ -1,6 +1,9 @@
 import cv2
 import numpy
 
+IMAGE_WIDTH = 640
+IMAGE_HEIGHT = 420
+
 class Img:
     def __init__(self, img):
         self._bgrImg = img
@@ -25,7 +28,7 @@ class VideoLoader:
         ret, frame = self.cap.read()
         if not ret:
             return False
-        self._img= Img(cv2.resize(frame,(640,420),interpolation=cv2.INTER_AREA))
+        self._img= Img(cv2.resize(frame, (IMAGE_WIDTH, IMAGE_HEIGHT), interpolation=cv2.INTER_AREA))
         return True
     def showSegmentation(self,carVec):
 
