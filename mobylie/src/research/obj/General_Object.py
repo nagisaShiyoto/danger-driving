@@ -1,5 +1,7 @@
-import src.research.obj.Bounding_Box as Bounding_Box
-#import mobylie.src.research.obj.Bounding_Box as Bounding_Box
+#import src.research.obj.Bounding_Box as Bounding_Box
+#import src.research.imgDetector as imgeDetector
+import mobylie.src.research.imgDetector as imgeDetector
+import mobylie.src.research.obj.Bounding_Box as Bounding_Box
 import time  # the class for the time management
 
 class Vec:
@@ -58,6 +60,7 @@ class General_Object:
         self.data.position.x = self.id * 2
         self.data.position.y = self.id * 2 + 1
         ########################test############################
+        self.distance=imgeDetector.imgDetector.calcDistanceWay1(name,bounding_box)#check for distance
 
     def make_our_car(self):
         return General_Object(Bounding_Box.Bounding_Box(0, 0, 0, 0), "our Car")

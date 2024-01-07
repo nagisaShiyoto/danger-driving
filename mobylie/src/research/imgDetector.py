@@ -1,22 +1,25 @@
-from src.research.obj import Bounding_Box
-from src.research.obj import General_Object as obj
+#from src.research.obj import Bounding_Box
+#from src.research.obj import General_Object as obj
 
-#from mobylie.src.research.obj import Bounding_Box
-#from mobylie.src.research.obj import General_Object as obj
+from mobylie.src.research.obj import Bounding_Box
+from mobylie.src.research.obj import General_Object as obj
 
 IMAGE_WIDTH = 640
 IMAGE_HEIGHT = 420
 FOCAL_LENGTH = 27
-SENSOR_SIZE = 1
+SENSOR_SIZE = 1/2.3
 
 class Statistics:
     # the data can use another check, but these are the base values I found.
-
+    NOT_IN_DATA_FLAG=-1
+    DATA = {"truck": 2.7, "car": 1.6}  # the avg height of clavicles in meters
     @staticmethod
     def getHeight(type):
-        DATA = {"Truck": 2.7, "Car": 1.6}  # the avg height of clavicles in meters
 
-        return DATA[type]
+        try:
+            return Statistics.DATA[type]
+        except KeyError:
+            return -1
 
 
 class imgDetector:
@@ -62,9 +65,14 @@ class imgDetector:
             self.compareList(signs, False)
         else:
             self.copySignArr(signs)
-    def calcDistanceWay1(self, other_object):
+
+    @staticmethod
+    def calcDistanceWay1(objectName,boundingBox):
         num_of_pixels = IMAGE_HEIGHT * IMAGE_WIDTH
-        return (FOCAL_LENGTH * Statistics.getHeight(other_object.getName()) * num_of_pixels) / (other_object.getBoundingBox().getLength() * IMAGE_HEIGHT)
+        objHight=Statistics.getHeight(objectName)
+        if(objHight==Statistics.NOT_IN_DATA_FLAG):
+            return Statistics.NOT_IN_DATA_FLAG
+        return (FOCAL_LENGTH * objHight * SENSOR_SIZE *num_of_pixels) / (boundingBox.getLength() * IMAGE_HEIGHT)
 
     def updateOurCar(self):
         sum = obj.Data(obj.Vec(0, 0), obj.Vec(0, 0), obj.Vec(0, 0))
