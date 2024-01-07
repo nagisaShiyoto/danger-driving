@@ -3,6 +3,8 @@
 import mobylie.src.research.imgDetector as imgeDetector
 import mobylie.src.research.obj.Bounding_Box as Bounding_Box
 import time  # the class for the time management
+import math
+
 
 class Vec:
     # Constructors
@@ -56,12 +58,18 @@ class General_Object:
         # adding the ID
         self.id = General_Object.static_id
         General_Object.static_id += 1
-        ########################test############################
-        self.data.position.x = self.id * 2
-        self.data.position.y = self.id * 2 + 1
-        ########################test############################
-        self.distance=imgeDetector.imgDetector.calcDistanceWay1(name,bounding_box)#check for distance
 
+        self.distance=imgeDetector.imgDetector.calcDistanceWay1(name,bounding_box)#check for distance
+        point=Vec(bounding_box.x,(bounding_box.y-(bounding_box.length/2)))#getting the point it checked the distance
+        ########################test############################
+        if(name!="our_car"):
+            self.data.position.x,self.data.position.y = self.get_X_Y_distance(self.distance,point)
+        ########################test############################
+    def get_X_Y_distance(self,distance_from_point,point):
+        rad_degree=math.atan(point.y/point.x)
+        x_distance=distance_from_point*math.cos(rad_degree)
+        y_distance=distance_from_point*math.sin(rad_degree)
+        return x_distance,y_distance
     def make_our_car(self):
         return General_Object(Bounding_Box.Bounding_Box(0, 0, 0, 0), "our Car")
 
