@@ -66,6 +66,7 @@ class imgDetector:
         else:
             self.copySignArr(signs)
 
+#calc the distance in cm probably
     @staticmethod
     def calcDistanceWay1(objectName,boundingBox):
         num_of_pixels = IMAGE_HEIGHT * IMAGE_WIDTH
