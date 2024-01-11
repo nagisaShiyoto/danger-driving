@@ -5,15 +5,15 @@ import cv2
 import videoLoader
 import time
 import CCA_model as cca
-
+from mobylie.src.research.database import databaseManger
 
 def main():
+    dataManager=databaseManger.Database_Manger("database/database.db")
+    dataManager.crateDatabase()
+    dataManager.insertRandomData()
     #i need to copy the y so it will fit
-    dictator={"SBP":[120,109,130,121,135,140],"DBP":[76,80,82,78,85,87],
-              "Height":[165,180,170,185,180,187], "Weight":[60,80,70,85,90,87]}
-    #input_data=[[120,109,130,121,135,140],[76,80,82,78,85,87]]
-    #output_data=[[165,180,170,185,180,187],[60,80,70,85,90,87]]
-    predictor=cca.cca_model(dictator)
+    dictator=dataManager.create_dictionary(dataManager.X_TABLE_NAME)
+    predictor=cca.cca_model(dictator[0])
 
 
     loader = videoLoader.VideoLoader("../videos/highway1.mp4")

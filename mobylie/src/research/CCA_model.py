@@ -10,7 +10,7 @@ output:none
 def plot_regression_line(x, y, b):
   # plotting the actual points as scatter plot
   plt.scatter(x, y, color = "m",
-        marker = "o", s = 30)
+        marker = "+", s = 10)
 
   # predicted response vector
   y_pred = b[0] + b[1]*x
@@ -27,18 +27,19 @@ def plot_regression_line(x, y, b):
 
 
 class cca_model:
-
+    AMOUNT_OF_X_VARS=8
     """create the class, calc weight, create prediction"""
     def __init__(self,data):
+
         self.weighTracker={}
         Tracker,allData=cca_model.dictToArrays(data)#create an array from a dict
-        self.weights=cca_model.calc_weights(allData[:2],allData[2:])
+        self.weights=cca_model.calc_weights(allData[:self.AMOUNT_OF_X_VARS],np.tile(allData[self.AMOUNT_OF_X_VARS:],(self.AMOUNT_OF_X_VARS,1)))
         for key,value in Tracker.items():
             #make a dict with name and weight
             self.weighTracker[key]=self.weights[value]
         points=cca_model.calcLinarPoint(allData,self.weights)#create the linear point from data
         self.m,self.b,r,p,std_err=stats.linregress(points[0],points[1])#calc the regrassion
-        #plot_regression_line(points[0],points[1],(self.b,self.m))#testing the model
+        plot_regression_line(points[0],points[1],(self.b,self.m))#testing the model
 
     """
     make a correlation based prediction
@@ -48,7 +49,7 @@ class cca_model:
     def predict(self,input):
         #create the state by adding the weighted vars
         state=np.sum(input*self.weights[:len(input)])
-        #y        =    b   m    *   x
+        #y        =    b +   m  *   x
         prediction=self.b+self.m*state
         return prediction
 
@@ -79,12 +80,15 @@ class cca_model:
         for idx,wight in enumerate(weights):
             weighted_points.append(np.dot(wight,allData[idx]))
         #adding it to one row
-        input=weighted_points[0]+weighted_points[1]
-        result=weighted_points[2]+weighted_points[3]
+        input=weighted_points[0]+weighted_points[1]+\
+              weighted_points[2]+weighted_points[3]+\
+              weighted_points[4]+weighted_points[5]+\
+              weighted_points[6]+weighted_points[7]
+        result=weighted_points[8]
         return input,result
 
     """
-    cac the eigenVector and eigenValue of the multypication of 4 matrixes
+    calc the eigenVector and eigenValue of the multypication of 4 matrixes
     input:the matrixes by order
     output:eigenValue-good to have,
         eigenVector-from here we can get the weights,
@@ -110,19 +114,19 @@ class cca_model:
     def calc_weights(input_data,output_data):
         #calculating the covariance matrix
         cov=np.cov(input_data,output_data)
-        Rxx=cov[:-len(input_data),:-len(output_data)]
-        Ryy=cov[-len(input_data):,-len(output_data):]
-        Ryx=np.cov(input_data,output_data)[-len(input_data):,:-len(output_data)]
+        Rxx=cov[:-len(input_data),:-len(output_data)]#cov(x,x)
+        Ryy=cov[-len(input_data):,-len(output_data):]#cov(y,y)
+        Ryx=cov[-len(input_data):,:-len(output_data)]#cov(y,x)
         Rxy=Ryx.transpose()
 
         #getting the eigenVector(the weights)
         input_values,intput_weight,input_wanted_value=\
-            cca_model.getEigenVector(np.linalg.inv(Rxx),
-                                     Rxy,np.linalg.inv(Ryy),Ryx)
+            cca_model.getEigenVector(np.linalg.pinv(Rxx),
+                                     Rxy,np.linalg.pinv(Ryy),Ryx)
 
         output_values,output_weight,output_wanted_value=\
-            cca_model.getEigenVector( np.linalg.inv(Ryy),
-                                      Ryx,np.linalg.inv(Rxx), Rxy)
+            cca_model.getEigenVector( np.linalg.pinv(Ryy),
+                                      Ryx,np.linalg.pinv(Rxx), Rxy)
 
         #making the input_wieght and output_weight on array  and getting only the weight we need
-        return np.append(intput_weight[:,input_wanted_value],(output_weight[:,output_wanted_value]))
+        return np.append(intput_weight[:,input_wanted_value],(output_weight[0,output_wanted_value]))
