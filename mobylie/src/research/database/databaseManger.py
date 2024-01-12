@@ -69,33 +69,20 @@ class Database_Manger:
         return data_list
 
     def create_dictionary(self,tableName):
-        x_dict = {} # createing the dict
+        dictinary = {} # createing the dict
 
         # add the data to the dict
-        x_dict["angle"] = self.fetchData(tableName,"angle")
-        x_dict["speed"] = self.fetchData(tableName,"speed")
-        x_dict["acceleration"] = self.fetchData(tableName,"acceleration")
-        x_dict["amount_of_cars"] = self.fetchData(tableName,"amount_of_cars")
-        x_dict["average_speed_of_cars"] = self.fetchData(tableName,"average_speed_of_cars")
-        x_dict["stop_sign"] = self.fetchData(tableName,"stop_sign")
-        x_dict["road_angle"] = self.fetchData(tableName,"road_angle")
-        x_dict["slow_sign"] = self.fetchData(tableName,"slow_sign")
-        x_dict["answer"] = self.fetchData(tableName,"answer")
+        dictinary["angle"] = self.fetchData(tableName,"angle")
+        dictinary["speed"] = self.fetchData(tableName,"speed")
+        dictinary["acceleration"] = self.fetchData(tableName,"acceleration")
+        dictinary["amount_of_cars"] = self.fetchData(tableName,"amount_of_cars")
+        dictinary["average_speed_of_cars"] = self.fetchData(tableName,"average_speed_of_cars")
+        dictinary["stop_sign"] = self.fetchData(tableName,"stop_sign")
+        dictinary["road_angle"] = self.fetchData(tableName,"road_angle")
+        dictinary["slow_sign"] = self.fetchData(tableName,"slow_sign")
+        dictinary["answer"] = self.fetchData(tableName,"answer")
 
-        y_dict = {} # createing the dict
-
-        # add the data to the dict
-        y_dict["angle"] = self.fetchData(tableName,"angle")
-        y_dict["speed"] = self.fetchData(tableName,"speed")
-        y_dict["acceleration"] = self.fetchData(tableName,"acceleration")
-        y_dict["amount_of_cars"] = self.fetchData(tableName,"amount_of_cars")
-        y_dict["average_speed_of_cars"] = self.fetchData(tableName,"average_speed_of_cars")
-        y_dict["stop_sign"] = self.fetchData(tableName,"stop_sign")
-        y_dict["road_angle"] = self.fetchData(tableName,"road_angle")
-        y_dict["slow_sign"] = self.fetchData(tableName,"slow_sign")
-        y_dict["answer"] = self.fetchData(tableName,"answer")
-
-        return (x_dict, y_dict)
+        return dictinary
 
     def close_connection(self):
         # Closing the connection
@@ -104,12 +91,11 @@ class Database_Manger:
     def insertRandomData(self):
         for b in range(1,11):
             i=random. randint(1, 10)
-            self.insert_X_Data(i*10,i*20,i*5,i,i*20,i*10,i%2,i%2,i*2)
-            #self.insert_Y_Data(i*10,i*20,i*5,i,i*20,i*10,i%2,i%2,i*2)
+            self.insert_Data(self.X_TABLE_NAME,i*10,i*20,i*5,i,i*20,i*10,i%2,i%2,i*2)
+            self.insert_Data(self.Y_TABLE_NAME,i*10,i*20,i*5,i,i*20,i*10,i%2,i%2,i*2)
 
-    def insert_X_Data(self,angle, speed, acceleration, amount_of_cars, average_speed_of_cars, road_angle, stop_sign, slow_sign, answer):
-        create_table_query=f"""INSERT INTO x_data ("angle", "speed", "acceleration", "amount_of_cars", "Average_speed_of_cars", "road_angle", "stop_sign", "slow_sign", "answer")
+    def insert_Data(self,table_name,angle, speed, acceleration, amount_of_cars, average_speed_of_cars, road_angle, stop_sign, slow_sign, answer):
+        create_table_query=f"""INSERT INTO {table_name} ("angle", "speed", "acceleration", "amount_of_cars", "Average_speed_of_cars", "road_angle", "stop_sign", "slow_sign", "answer")
         VALUES( {angle}, {speed}, {acceleration},{amount_of_cars},{ average_speed_of_cars}, {road_angle},{stop_sign}, {slow_sign}, {answer});"""
-        print(create_table_query)
         self.cursor.execute(create_table_query)
         self.conn.commit()

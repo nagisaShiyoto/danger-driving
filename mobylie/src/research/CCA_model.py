@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
+import math
 
 """
 to visualize the gruph for twsting
@@ -10,19 +11,18 @@ output:none
 def plot_regression_line(x, y, b):
   # plotting the actual points as scatter plot
   plt.scatter(x, y, color = "m",
-        marker = "+", s = 10)
+        marker = "+", s = 30)
 
   # predicted response vector
   y_pred = b[0] + b[1]*x
 
   # plotting the regression line
-  plt.plot(x, y_pred, color = "g")
+  plt.plot(list(x), y_pred, color = "g")
 
   # putting labels
   plt.xlabel('x')
   plt.ylabel('y')
-  for i in range(10000):
-      plt.show()
+  plt.show()
 
 
 
@@ -39,8 +39,28 @@ class cca_model:
             self.weighTracker[key]=self.weights[value]
         points=cca_model.calcLinarPoint(allData,self.weights)#create the linear point from data
         self.m,self.b,r,p,std_err=stats.linregress(points[0],points[1])#calc the regrassion
-        plot_regression_line(points[0],points[1],(self.b,self.m))#testing the model
-
+        #plot_regression_line(points[0],points[1],(self.b,self.m))#testing the model
+    """
+    getting from dettector the values for the prediction
+    input:dettector-the one with all the values
+        Y_values-say if we want the y values(1) or the x values(0)
+    output: the data we need for prediction
+    """
+    @staticmethod
+    def getValues(dettector,Y_values):
+        angle=0
+        sumVel=[0,0]
+        for car in dettector.carArray:
+            sumVel[0]+=car.data.velocity.x
+            sumVel[1]+=car.data.velocity.y
+        if( dettector.ourCar.data.position.y!=0):
+            angle=math.tan(dettector.ourCar.data.position.x/dettector.ourCar.data.position.y)
+        return (angle,
+         dettector.ourCar.data.velocity.x,
+         dettector.ourCar.data.aceloration.x,
+         len(dettector.carArray),
+         sumVel[Y_values]/len(dettector.carArray),
+         0,0,0)
     """
     make a correlation based prediction
     input:the state of the system
@@ -51,7 +71,7 @@ class cca_model:
         state=np.sum(input*self.weights[:len(input)])
         #y        =    b +   m  *   x
         prediction=self.b+self.m*state
-        return prediction
+        return prediction/self.weights[8]
 
     """
     create an array from dictonary
