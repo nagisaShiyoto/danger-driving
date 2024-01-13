@@ -43,7 +43,7 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
-#from ultralytics.utils.plotting import Annotator, colors, save_one_box
+# from ultralytics.utils.plotting import Annotator, colors, save_one_box
 from models.common import DetectMultiBackend
 from utils.dataloaders import IMG_FORMATS, VID_FORMATS, LoadImages, LoadScreenshots, LoadStreams
 from utils.general import (LOGGER, Profile, check_file, check_img_size, check_imshow, check_requirements, colorstr, cv2,
@@ -54,22 +54,22 @@ from utils.torch_utils import select_device, smart_inference_mode
 @smart_inference_mode()
 def detectCar(img):
     try:
-        weights='wieghts/yolov5s.pt'  # model path or triton URL
-        #source=ROOT / 'data/images'  # file/dir/URL/glob/screen/0(webcam)
-        data=ROOT / 'data/coco128.yaml'  # dataset.yaml path
-        imgsz=(640, 640)  # inference size (height, width)
-        device=''  # cuda device, i.e. 0 or 0,1,2,3 or cpu
-        vid_stride=1  # video frame-rate stride
-        dnn=False  # use OpenCV DNN for ONNX inference
-        half=False  # use FP16 half-precision inference
-        hide_conf=False  # hide confidences
-        visualize=False  # visualize features
-        augment=False  # augmented inference
-        agnostic_nms=False  # class-agnostic NMS
-        classes=None  # filter by class: --class 0, or --class 0 2 3
-        max_det=1000  # maximum detections per image
-        iou_thres=0.45  # NMS IOU threshold
-        conf_thres=0.25  # confidence threshold, pretty low confidence(work for now)
+        weights = 'wieghts/yolov5s.pt'  # model path or triton URL
+        # source=ROOT / 'data/images'  # file/dir/URL/glob/screen/0(webcam)
+        data = ROOT / 'data/coco128.yaml'  # dataset.yaml path
+        imgsz = (640, 640)  # inference size (height, width)
+        device = ''  # cuda device, i.e. 0 or 0,1,2,3 or cpu
+        vid_stride = 1  # video frame-rate stride
+        dnn = False  # use OpenCV DNN for ONNX inference
+        half = False  # use FP16 half-precision inference
+        hide_conf = False  # hide confidences
+        visualize = False  # visualize features
+        augment = False  # augmented inference
+        agnostic_nms = False  # class-agnostic NMS
+        classes = None  # filter by class: --class 0, or --class 0 2 3
+        max_det = 1000  # maximum detections per image
+        iou_thres = 0.45  # NMS IOU threshold
+        conf_thres = 0.25  # confidence threshold, pretty low confidence(work for now)
 
         # Load model
         device = select_device(device)
@@ -83,8 +83,8 @@ def detectCar(img):
         # Run inference
         model.warmup(imgsz=(1 if pt or model.triton else bs, 3, *imgsz))  # warmup
         seen, windows, dt = 0, [], (Profile(), Profile(), Profile())
-        
-        im, im0s = dataset.im,dataset.im0
+
+        im, im0s = dataset.im, dataset.im0
         with dt[0]:
             im = torch.from_numpy(im).to(model.device)
             im = im.half() if model.fp16 else im.float()  # uint8 to fp16/32
@@ -102,29 +102,31 @@ def detectCar(img):
         # Process predictions
         for i, det in enumerate(pred):  # per image
             seen += 1
-            im0=im0s.copy()
-            #s += '%gx%g ' % im.shape[2:]  # print string
+            im0 = im0s.copy()
+            # s += '%gx%g ' % im.shape[2:]  # print string
             if len(det):
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_boxes(im.shape[2:], det[:, :4], im0.shape).round()
 
                 # Print results
-                #for c in det[:, 5].unique():
+                # for c in det[:, 5].unique():
                 #    n = (det[:, 5] == c).sum()  # detections per class
                 #    #s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  # add to string
                 # Write results
-                result=""
+                result = ""
                 for *xyxy, conf, cls in reversed(det):
                     c = int(cls)  # integer class
                     label = names[c] if hide_conf else f'{names[c]}'
                     confidence = float(conf)
                     confidence_str = f'{confidence:.2f}'
-                    xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) ).view(-1).tolist()  # normalized xywh
-                    result+=str(xywh)+","+label+"\n"
+                    xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4))).view(-1).tolist()  # normalized xywh
+                    result += str(xywh) + "," + label + "\n"
                 return result
         return "not found"
     except ValueError:
         return ValueError
+
+
 def parse_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default=ROOT / 'yolov5s.pt', help='model path or triton URL')
@@ -161,7 +163,7 @@ def parse_opt():
     return opt
 
 
-
 if __name__ == '__main__':
-    #opt = parse_opt()
-    print(detectCar(cv2.imread("C:/Users/test0/OneDrive/שולחן העבודה/magshimim/eylon_yotam_project/mobylie/detectModels/tempFile.png")))
+    # opt = parse_opt()
+    print(detectCar(cv2.imread(
+        "C:/Users/test0/OneDrive/שולחן העבודה/magshimim/eylon_yotam_project/mobylie/detectModels/tempFile.png")))

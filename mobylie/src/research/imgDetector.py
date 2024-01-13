@@ -1,5 +1,5 @@
-#from src.research.obj import Bounding_Box
-#from src.research.obj import General_Object as obj
+# from src.research.obj import Bounding_Box
+# from src.research.obj import General_Object as obj
 
 from mobylie.src.research.obj import Bounding_Box
 from mobylie.src.research.obj import General_Object as obj
@@ -7,12 +7,14 @@ from mobylie.src.research.obj import General_Object as obj
 IMAGE_WIDTH = 640
 IMAGE_HEIGHT = 420
 FOCAL_LENGTH = 27
-SENSOR_SIZE = 1/2.3
+SENSOR_SIZE = 1 / 2.3
+
 
 class Statistics:
     # the data can use another check, but these are the base values I found.
-    NOT_IN_DATA_FLAG=-1
+    NOT_IN_DATA_FLAG = -1
     DATA = {"truck": 2.7, "car": 1.6}  # the avg height of clavicles in meters
+
     @staticmethod
     def getHeight(type):
 
@@ -54,7 +56,7 @@ class imgDetector:
             objText = objText.replace("[", "")
             objText = objText.replace("]", "")
             info = objText.split(",")
-            if (len(info) == 5):
+            if len(info) == 5:
                 box = Bounding_Box.Bounding_Box(int(float(info[0])),
                                                 int(float(info[1])),
                                                 int(float(info[2])),
@@ -66,14 +68,14 @@ class imgDetector:
         else:
             self.copySignArr(signs)
 
-#calc the distance in cm probably
+    # calc the distance in cm probably
     @staticmethod
-    def calcDistanceWay1(objectName,boundingBox):
+    def calcDistanceWay1(objectName, boundingBox):
         num_of_pixels = IMAGE_HEIGHT * IMAGE_WIDTH
-        objHight=Statistics.getHeight(objectName)
-        if(objHight==Statistics.NOT_IN_DATA_FLAG):
+        objHight = Statistics.getHeight(objectName)
+        if (objHight == Statistics.NOT_IN_DATA_FLAG):
             return Statistics.NOT_IN_DATA_FLAG
-        return (FOCAL_LENGTH * objHight * SENSOR_SIZE *num_of_pixels) / (boundingBox.getLength() * IMAGE_HEIGHT)
+        return (FOCAL_LENGTH * objHight * SENSOR_SIZE * num_of_pixels) / (boundingBox.getLength() * IMAGE_HEIGHT)
 
     def updateOurCar(self):
         sum = obj.Data(obj.Vec(0, 0), obj.Vec(0, 0), obj.Vec(0, 0))
