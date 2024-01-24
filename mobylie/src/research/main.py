@@ -5,14 +5,11 @@ import cv2
 import videoLoader
 import time
 import CCA_model as cca
-import numpy as np
 from mobylie.src.research.database import databaseManger
-import math
 
 
 def main():
     dataManager = databaseManger.Database_Manger("database/database.db")
-    dataManager.crateDatabase()
     # i need to copy the y so it will fit
     dictatorX = dataManager.create_dictionary(dataManager.X_TABLE_NAME)
     dictatorY = dataManager.create_dictionary(dataManager.Y_TABLE_NAME)
@@ -20,6 +17,8 @@ def main():
     predictorY = cca.cca_model(dictatorY)
 
     loader = videoLoader.VideoLoader("../videos/highway1.mp4")
+    #add the name of map
+    dataManager.addMap("map"+str(dataManager.vid_num))
     dettector = imgDetector.imgDetector()
     while loader.nextFrame():
         start_time = time.time()

@@ -24,6 +24,7 @@ class VideoLoader:
         if not self.cap.isOpened():
             raise Exception("wrong path")
 
+
     # move to the next frame
     def nextFrame(self):
         ret, frame = self.cap.read()

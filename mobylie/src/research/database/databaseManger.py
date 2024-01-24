@@ -5,8 +5,8 @@ import random
 class Database_Manger:
     X_TABLE_NAME = "x_data"
     Y_TABLE_NAME = "y_data"
-
     def __init__(self, database_name):
+        self.vid_num=0
         # Establishing a connection to the database (or creating it if it doesn't exist)
         self.conn = sqlite3.connect(database_name)
         # Creating a cursor object to execute SQL commands
@@ -18,9 +18,29 @@ class Database_Manger:
             self.collect_data = False
         self.formerXData = 0
         self.formerYData = 0
+        self.crateDatabase()
+        self.vid_num=self.fetchVidNum()
+
+
+    def fetchVidNum(self):
+        """get the map key
+        output:mapKey"""
+        self.cursor.execute(f"SELECT vid_num FROM {self.X_TABLE_NAME} ORDER BY vid_num DESC LIMIT 1")
+        data = self.cursor.fetchall()
+        if(len(data)==0):
+            return 0
+        return data[0][0]+1
 
     def __del__(self):
         self.close_connection()
+
+    def addMap(self,name):
+        """add map name and his key so i we can take it after
+            name:the name of the map"""
+        add_map = f"""INSERT INTO mapKey ("map_name","map_num")
+        VALUES( "{name}",{self.vid_num});"""
+        self.cursor.execute(add_map)
+        self.conn.commit()
 
     def crateDatabase(self):
         # SQL query to create a table
@@ -34,7 +54,8 @@ class Database_Manger:
             "road_angle" FLOAT,
             "stop_sign" INTEGER,
             "time_passed" INTEGER,
-            "answer" FLOAT
+            "answer" FLOAT,
+            "vid_num" INTEGER 
         );
         """
 
@@ -54,7 +75,21 @@ class Database_Manger:
             "road_angle" FLOAT,
             "stop_sign" INTEGER,
             "time_passed" INTEGER,
-            "answer" FLOAT
+            "answer" FLOAT,
+            "vid_num" INTEGER
+        );
+        """
+
+        # Executing the query
+        self.cursor.execute(create_table_query)
+
+        # Committing the changes
+        self.conn.commit()
+
+        create_table_query = f"""
+        CREATE TABLE IF NOT EXISTS mapKey (
+            "map_name" STRING,
+            "map_num" INTEGER PRIMARY KEY
         );
         """
 
@@ -103,7 +138,7 @@ class Database_Manger:
             self.insert_Data(self.Y_TABLE_NAME, (i * 10, i * 20, i * 5, i, i * 20, i * 10, i % 2, i % 2), i * 2)
 
     def insert_Data(self, table_name, inputData,answer):
-        create_table_query = f"""INSERT INTO {table_name} ("angle", "speed", "acceleration", "amount_of_cars", "Average_speed_of_cars", "road_angle", "stop_sign", "time_passed", "answer")
-        VALUES( {inputData[0]}, {inputData[1]}, {inputData[2]},{inputData[3]},{inputData[4]}, {inputData[5]},{inputData[6]}, {inputData[7]}, {answer});"""
-        self.cursor.execute(create_table_query)
+        add_table_query = f"""INSERT INTO {table_name} ("angle", "speed", "acceleration", "amount_of_cars", "Average_speed_of_cars", "road_angle", "stop_sign", "time_passed", "answer","vid_num")
+        VALUES( {inputData[0]}, {inputData[1]}, {inputData[2]},{inputData[3]},{inputData[4]}, {inputData[5]},{inputData[6]}, {inputData[7]}, {answer},{self.vid_num});"""
+        self.cursor.execute(add_table_query)
         self.conn.commit()
