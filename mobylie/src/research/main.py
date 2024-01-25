@@ -17,8 +17,7 @@ def main():
     predictorY = cca.cca_model(dictatorY)
 
     loader = videoLoader.VideoLoader("../videos/highway1.mp4")
-    #add the name of map
-    dataManager.addMap("map"+str(dataManager.vid_num))
+
     dettector = imgDetector.imgDetector()
     while loader.nextFrame():
         start_time = time.time()

@@ -13,19 +13,23 @@ class Database_Manger:
         self.cursor = self.conn.cursor()
         collectDataAnswer = input("do you want to collect data?")
         # check if you want to collect data
-        self.collect_data = True
-        if collectDataAnswer == "n":
-            self.collect_data = False
+        self.collect_data = False
+        self.crateDatabase()
+        if collectDataAnswer != "n":
+            self.collect_data = True
+            self.vid_num=self.fetchVidNum()
+            #add the defult name of map
+            self.addMap("map"+str(self.vid_num))
         self.formerXData = 0
         self.formerYData = 0
-        self.crateDatabase()
-        self.vid_num=self.fetchVidNum()
+
+
 
 
     def fetchVidNum(self):
         """get the map key
         output:mapKey"""
-        self.cursor.execute(f"SELECT vid_num FROM {self.X_TABLE_NAME} ORDER BY vid_num DESC LIMIT 1")
+        self.cursor.execute(f"SELECT map_num FROM mapKey ORDER BY map_num DESC LIMIT 1")
         data = self.cursor.fetchall()
         if(len(data)==0):
             return 0
