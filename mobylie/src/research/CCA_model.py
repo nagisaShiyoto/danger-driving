@@ -25,7 +25,7 @@ def plot_regression_line(x, y, b):
     plt.xlabel('x')
     plt.ylabel('y')
     plt.show()
-    #plt.close()
+    # plt.close()
 
 
 class cca_model:
