@@ -5,11 +5,22 @@ import cv2
 import videoLoader
 import time
 import CCA_model as cca
-#from mobylie.src.research.database import databaseManger
-from src.research.database import databaseManger
+from mobylie.src.research.database import databaseManger
+# from src.research.database import databaseManger
+import kalman_filter
 
 
 def main():
+    kf = kalman_filter.KalmanFilter([[1, 1], [0, 1]],
+                                    [[0.1, 0.1], [0.1, 0.2]],
+                                    [[1, 0],[0,1]], [1, 1],
+                                    [[1, 1], [2, 2]],
+                                    [[625,0],[0,36]])
+    kf.predict()
+    kf.update([[1, 0]])
+    print(kf.X)
+    print(kf.P)
+
     dataManager = databaseManger.Database_Manger("database/database.db")
     # i need to copy the y so it will fit
     dictatorX = dataManager.create_dictionary(dataManager.X_TABLE_NAME)
@@ -58,7 +69,6 @@ def main():
         ########################test############################
 
         ########################test############################
-
 
         cv2.imshow("bgr", loader._img._bgrImg)
         cv2.imshow("hsl", loader._img._hlsImg)
