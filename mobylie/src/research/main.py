@@ -5,7 +5,8 @@ import cv2
 import videoLoader
 import time
 import CCA_model as cca
-from mobylie.src.research.database import databaseManger
+#from mobylie.src.research.database import databaseManger
+from src.research.database import databaseManger
 
 
 def main():

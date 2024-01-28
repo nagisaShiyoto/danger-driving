@@ -1,14 +1,14 @@
 import numpy as np
 
+
 class KalmanFilter:
 
-    def __init__(self, F, B, Q, K):
+    def __init__(self, F, B, Q):
         self.F = F
         self.B = B
         self.Q = Q
-        self.K = K
+        self.Ft = np.transpose(F)
+        #sel
 
-        self.Ft = np.linalg.inv(F)
-
-
-    def prediction_kalman():
+    def prediction_kalman(self):
+        return 0
