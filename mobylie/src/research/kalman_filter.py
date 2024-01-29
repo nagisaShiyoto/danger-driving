@@ -15,10 +15,20 @@ class KalmanFilter:
         self.K = []
 
     def predict(self):
-        self.X = self.F @ self.X
-        self.P = self.F @ self.P @ self.Ft + self.Q
+        self.X = self.F.dot(self.X)
+        self.P = self.F.dot(self.P).dot(self.Ft) + self.Q
 
     def update(self, Z):
-        self.K = self.P @ self.Ht @ numpy.linalg.matrix_power((self.H @ self.P @ self.Ht + self.R), -1)
-        self.X=self.X- (Z - (self.H @ self.X)@self.K)
-        self.P = self.P-self.K @ self.H @ self.P
+        self.K = self.P.dot(self.Ht).dot(numpy.linalg.matrix_power((self.H.dot(self.P.dot(self.Ht)) + self.R), -1))
+        self.X= self.X +self.K.dot((Z-self.H.dot( self.X)).T).T
+        self.P = self.P-self.K.dot( self.H ).dot( self.P)
+
+
+    #def predict(self):
+    #    self.X = self.F @ self.X
+    #    self.P = self.F @ self.P @ self.Ft + self.Q
+
+    #def update(self, Z):
+    #    self.K = self.P @ self.Ht @ numpy.linalg.matrix_power((self.H @ self.P @ self.Ht + self.R), -1)
+    #    self.X= self.X +(self.K@(Z - self.H @ self.X).T).T
+    #    self.P = self.P-self.K @ self.H @ self.P
