@@ -18,9 +18,10 @@ class KalmanFilter:
         self.X = self.F.dot(self.X)
         self.P = self.F.dot(self.P).dot(self.Ft) + self.Q
 
+
     def update(self, Z):
-        self.K = self.P.dot(self.Ht).dot(numpy.linalg.matrix_power((self.H.dot(self.P.dot(self.Ht)) + self.R), -1))
-        self.X= self.X +self.K.dot((Z-self.H.dot( self.X)).T).T
+        self.K = self.P.dot(self.Ht).dot(numpy.linalg.inv((self.H.dot(self.P.dot(self.Ht)) + self.R)))
+        self.X = self.X +self.K.dot((Z-self.H.dot( self.X)).T).T
         self.P = self.P-self.K.dot( self.H ).dot( self.P)
 
 

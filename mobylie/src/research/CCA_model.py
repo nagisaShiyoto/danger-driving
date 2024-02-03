@@ -45,6 +45,7 @@ class cca_model:
             points = cca_model.calcLinarPoint(allData, self.weights)  # create the linear point from data
             self.m, self.b, r, p, std_err = stats.linregress(points[0], points[1])  # calc the regrassion
             plot_regression_line(points[0], points[1], (self.b, self.m))  # testing the model
+            self.certentry = r*r
         except:
             self.m = 0
             self.b = 0

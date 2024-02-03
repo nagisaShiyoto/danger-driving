@@ -74,7 +74,7 @@ class imgDetector:
         objHight = Statistics.getHeight(objectName)
         if (objHight == Statistics.NOT_IN_DATA_FLAG):
             return Statistics.NOT_IN_DATA_FLAG
-        return (FOCAL_LENGTH * objHight * SENSOR_SIZE * num_of_pixels) / (boundingBox.getLength() * IMAGE_HEIGHT)
+        return (FOCAL_LENGTH * objHight * SENSOR_SIZE * num_of_pixels) / (boundingBox.getLength() * IMAGE_HEIGHT*100.0)
 
     def updateOurCar(self):
         sum = obj.Data(obj.Vec(0, 0), obj.Vec(0, 0), obj.Vec(0, 0))
