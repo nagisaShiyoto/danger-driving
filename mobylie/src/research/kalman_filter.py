@@ -14,16 +14,26 @@ class KalmanFilter:
         self.R = np.array(R)
         self.K = []
 
-    def predict(self):
+    def predictG(self):
         self.X = self.F.dot(self.X)
         self.P = self.F.dot(self.P).dot(self.Ft) + self.Q
 
-
-    def update(self, Z):
+    def updateG(self, Z):
         self.K = self.P.dot(self.Ht).dot(numpy.linalg.inv((self.H.dot(self.P.dot(self.Ht)) + self.R)))
         self.X = self.X +self.K.dot((Z-self.H.dot( self.X)).T).T
         self.P = self.P-self.K.dot( self.H ).dot( self.P)
 
+
+    #our kalman prediction phaze
+    def predict(self,Z):
+        self.predictG()
+        self.updateG(Z)
+
+
+    #update stats in kalman faze
+    def update(self,Z):
+
+        self.updateG(Z)
 
     #def predict(self):
     #    self.X = self.F @ self.X

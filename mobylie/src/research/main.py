@@ -19,24 +19,26 @@ def main():
     dictatorY = dataManager.create_dictionary(dataManager.Y_TABLE_NAME)
     predictorX = cca.cca_model(dictatorX)
     predictorY = cca.cca_model(dictatorY)
-
-    kfXS = kalman_filter.KalmanFilter(  # https://www.fxp.co.il
+    kfX = kalman_filter.KalmanFilter(
+        # https://www.fxp.co.il
         np.array([[1, 1, 0.5], [0, 1, 1], [0, 0, 1]]),  # f
         [[0.2, 0.3, 0.35], [0, 0.3, 0.35], [0, 0, 0.35]],  # the certenty presentage
         [[1, 0, 0], [1, 0, 0], [1, 0, 0]],  # to adjust the matrix
         [0, 0, 0],  # will change every time
         [[0, 0, 0], [0, 0, 0], [0, 0, 0]],  # will change every time
-        [[predictorX.certentry, 1, 1], [1, predictorX.certentry, 1],[1, 1, predictorX.certentry]]
-    )  # the certenty precentage of CCA
-
-    kfXP = kalman_filter.KalmanFilter(
+        [[predictorX.certentry, 1, 1], [1, predictorX.certentry, 1], [1, 1, predictorX.certentry]]
+        # the certenty precentage of CCA
+    )
+    kfY = kalman_filter.KalmanFilter(
+        # https://www.fxp.co.il
         np.array([[1, 1, 0.5], [0, 1, 1], [0, 0, 1]]),  # f
         [[0.2, 0.3, 0.35], [0, 0.3, 0.35], [0, 0, 0.35]],  # the certenty presentage
         [[1, 0, 0], [1, 0, 0], [1, 0, 0]],  # to adjust the matrix
         [0, 0, 0],  # will change every time
         [[0, 0, 0], [0, 0, 0], [0, 0, 0]],  # will change every time
-        [[predictorX.certentry, 0,0],[0,predictorX.certentry,0] ,[0,0, predictorX.certentry]])  # the certenty precentage of CCA
-
+        [[predictorX.certentry, 1, 1], [1, predictorX.certentry, 1], [1, 1, predictorX.certentry]]
+        # the certenty precentage of CCA
+    )
     loader = videoLoader.VideoLoader("../videos/highway1.mp4")
 
     dettector = imgDetector.imgDetector()
@@ -86,24 +88,25 @@ def main():
         time_passed = end_time - start_time
         print(time_passed)
 
-        kfXP.X=kfXS.X
-        kfXP.P=kfXS.P
-        kfXP.predict()
-
         print("-------------------prediction-------------------")
         #                                                          time passed
         Zx = predictorX.predict(cca.cca_model.getValues(dettector, 0, 1))
         Zy = predictorY.predict(cca.cca_model.getValues(dettector, 1, 1))
-        kfXP.update([Zx,0,0])
-        print(kfXP.X)
+        kfX.predict([Zx, 0, 0])
+        kfY.predict([Zy, 0, 0])
+        print(kfX.X)
         print(Zx)
+        print(kfY.X)
+        print(Zy)
 
-        kfXS.X = kfXP.X
-        kfXS.P = kfXP.P
-        kfXS.update([dettector.ourCar.data.position.x,
-                     dettector.ourCar.data.velocity.x,
-                     dettector.ourCar.data.aceloration.x])
-        print(kfXS.X)
+        kfX.update([dettector.ourCar.data.position.x,
+                    dettector.ourCar.data.velocity.x,
+                    dettector.ourCar.data.aceloration.x])
+        kfY.update([dettector.ourCar.data.position.y,
+                    dettector.ourCar.data.velocity.y,
+                    dettector.ourCar.data.aceloration.y])
+        print(kfX.X)
+        print(kfY.X)
         if dataManager.collect_data:
             if dataManager.formerXData != 0 and dataManager.formerYData != 0:
                 dataManager.insert_Data(dataManager.X_TABLE_NAME, dataManager.formerXData[0],
