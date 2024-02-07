@@ -1,5 +1,5 @@
-#from src.research.obj import Bounding_Box
-#from src.research.obj import General_Object as obj
+# from src.research.obj import Bounding_Box
+# from src.research.obj import General_Object as obj
 from mobylie.src.research.obj import Bounding_Box
 from mobylie.src.research.obj import General_Object as obj
 
@@ -74,7 +74,8 @@ class imgDetector:
         objHight = Statistics.getHeight(objectName)
         if (objHight == Statistics.NOT_IN_DATA_FLAG):
             return Statistics.NOT_IN_DATA_FLAG
-        return (FOCAL_LENGTH * objHight * SENSOR_SIZE * num_of_pixels) / (boundingBox.getLength() * IMAGE_HEIGHT*100.0)
+        return (FOCAL_LENGTH * objHight * SENSOR_SIZE * num_of_pixels) / (
+                    boundingBox.getLength() * IMAGE_HEIGHT * 100.0)
 
     def updateOurCar(self):
         sum = obj.Data(obj.Vec(0, 0), obj.Vec(0, 0), obj.Vec(0, 0))
@@ -141,3 +142,18 @@ class imgDetector:
         self.signArray.clear()
         for sign in temp:
             self.carArray.append(sign)
+
+    @staticmethod
+    def alertUser(time, carVector, predX, predY):
+        X_RANGE = 5
+        Y_RANGE = 2
+        for car in carVector:
+            x = (car.data.position.x +
+                 car.data.velocity.x * time +
+                 0.5 * car.data.aceloration.x * time * time)
+            y = (car.data.position.y +
+                 car.data.velocity.y * time +
+                 0.5 * car.data.aceloration.y * time * time)
+            if ((x - X_RANGE) >= predX or (y - Y_RANGE) >= predY or (y + Y_RANGE) <= predY):
+                return True
+        return False

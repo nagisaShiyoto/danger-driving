@@ -94,6 +94,16 @@ def main():
         Zy = predictorY.predict(cca.cca_model.getValues(dettector, 1, 1))
         kfX.predict([Zx, 0, 0])
         kfY.predict([Zy, 0, 0])
+        print("do i need to wyrry?")
+        print(
+            imgDetector.imgDetector.alertUser
+                (
+                    1,
+                    dettector.carArray,
+                    kfX.X,
+                    kfY.X
+                )
+              )
         print(kfX.X)
         print(Zx)
         print(kfY.X)
