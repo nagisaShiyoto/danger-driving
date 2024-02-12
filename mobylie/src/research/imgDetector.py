@@ -154,6 +154,8 @@ class imgDetector:
             y = (car.data.position.y +
                  car.data.velocity.y * time +
                  0.5 * car.data.aceloration.y * time * time)
-            if ((x - X_RANGE) >= predX or (y - Y_RANGE) >= predY or (y + Y_RANGE) <= predY):
+            if (x - X_RANGE) >= predX[0] :
+                return True
+            if (y - Y_RANGE) >= predY[0] and (y + Y_RANGE) <= predY[0]:
                 return True
         return False
