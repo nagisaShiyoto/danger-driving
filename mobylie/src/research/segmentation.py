@@ -2,6 +2,15 @@ import numpy as np
 import cv2
 from scipy import ndimage
 import matplotlib.pyplot as plt
+
+def rgb2gray(rgb):
+
+    r, g, b = rgb[:,:,0], rgb[:,:,1], rgb[:,:,2]
+    gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
+
+    return gray
+
+
 #create a gussion blur kernel (to surpress noise)
 def gaussion_kernal(size,sigma=1):
     size=int(size)
@@ -112,8 +121,8 @@ def hysteresis(img,weak,strong=255):
     return img
 
 def main():
-    img=cv2.imread("../videos/4.jpg")
-    img=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    img=cv2.imread("../videos/3.jpg")
+    img=rgb2gray(img)
     kernal=gaussion_kernal(size=5,sigma=1.4)
     blurred_img=cv2.filter2D(img,-1,kernal)
     line_Image,slope=sobal_filter(blurred_img)
@@ -121,24 +130,35 @@ def main():
     thresholdImg,weak,strong=threshold(maxed_img)
     segmentatedImg=hysteresis(thresholdImg,weak,strong)
 
-    plt.imshow(segmentatedImg, cmap="gray")
-    plt.title("hi ma kore ahi?")
+
+
+
+    plt.imshow(img, cmap="gray")
+    plt.title("h")
     plt.axis("off")
     plt.show()
-    plt.imshow(thresholdImg, cmap="gray")
-    plt.title("hi ma kore")
-    plt.axis("off")
-    plt.show()
-    plt.imshow(maxed_img, cmap="gray")
-    plt.title("hi ma ko")
+    plt.imshow(blurred_img, cmap="gray")
+    plt.title("hi m")
     plt.axis("off")
     plt.show()
     plt.imshow(line_Image, cmap="gray")
     plt.title("hi ma k")
     plt.axis("off")
     plt.show()
-    cv2.imshow("h",img)
-    cv2.imshow("hi m",blurred_img)
+    plt.imshow(maxed_img, cmap="gray")
+    plt.title("hi ma ko")
+    plt.axis("off")
+    plt.show()
+    plt.imshow(thresholdImg, cmap="gray")
+    plt.title("hi ma kore")
+    plt.axis("off")
+    plt.show()
+    plt.imshow(segmentatedImg, cmap="gray")
+    plt.title("hi ma kore ahi?")
+    plt.axis("off")
+    plt.show()
+
+
 
     if cv2.waitKey(100000) == ord('q'):
         breakpoint()
