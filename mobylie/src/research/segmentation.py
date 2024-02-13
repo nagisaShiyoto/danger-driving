@@ -91,29 +91,54 @@ def threshold(img,lowThresholdRatio=0.05,highThresholdRatio=0.09):
     res[weak_i,weak_j]=weak
 
     return (res,weak,strong)
+#make weak line strong if it has strong pixel surronding it
+#otherwise turn it to 0
+def hysteresis(img,weak,strong=255):
+    M, N = img.shape
+    for i in range(1,M-1):
+        for j in range (1,N-1):
+            if(img[i,j] == weak):
+                try:
+                    if (
+                            (img[i+1, j-1] == strong) or (img[i+1, j] == strong) or (img[i+1, j+1] == strong)
+                        or (img[i, j-1] == strong) or (img[i, j+1] == strong)
+                        or (img[i-1, j-1] == strong) or (img[i-1, j] == strong) or (img[i-1, j+1] == strong)
+                    ):
+                        img[i, j] = strong
+                    else:
+                        img[i, j]=0
+                except IndexError as e:
+                    pass
+    return img
+
 def main():
     img=cv2.imread("../videos/4.jpg")
     img=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-    kernal=gaussion_kernal(size=6,sigma=3)
+    kernal=gaussion_kernal(size=5,sigma=1.4)
     blurred_img=cv2.filter2D(img,-1,kernal)
     line_Image,slope=sobal_filter(blurred_img)
     maxed_img=non_max_suppression(line_Image,slope)
     thresholdImg,weak,strong=threshold(maxed_img)
+    segmentatedImg=hysteresis(thresholdImg,weak,strong)
 
+    plt.imshow(segmentatedImg, cmap="gray")
+    plt.title("hi ma kore ahi?")
+    plt.axis("off")
+    plt.show()
     plt.imshow(thresholdImg, cmap="gray")
-    plt.title("hi ma k")
+    plt.title("hi ma kore")
     plt.axis("off")
     plt.show()
     plt.imshow(maxed_img, cmap="gray")
-    plt.title("hi ma")
+    plt.title("hi ma ko")
     plt.axis("off")
     plt.show()
     plt.imshow(line_Image, cmap="gray")
-    plt.title("hi m")
+    plt.title("hi ma k")
     plt.axis("off")
     plt.show()
     cv2.imshow("h",img)
-    cv2.imshow("hi",blurred_img)
+    cv2.imshow("hi m",blurred_img)
 
     if cv2.waitKey(100000) == ord('q'):
         breakpoint()
