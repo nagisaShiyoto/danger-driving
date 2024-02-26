@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 from scipy import ndimage
 import matplotlib.pyplot as plt
+from PIL import Image
 
 def rgb2gray(rgb):
 
@@ -21,8 +22,13 @@ def gaussion_kernal(size,sigma=1):
     return g
 
 def sobal_filter(img):
-    Kx=np.array([[-1,0,1],[-2,0,2],[-1,0,1]],np.float32)
-    Ky=np.array([[1,2,1],[0,0,0],[-1,-2,-1]],np.float32)
+
+    Kx=np.array([[-1,0,1],
+                        [-2,0,2],
+                        [-1,0,1]],np.float32)
+    Ky=np.array([[1,2,1],
+                        [0,0,0],
+                    [-1,-2,-1]],np.float32)
 
     #makes the convolation for straight line dettection
     Ix=ndimage.convolve(img,Kx)
@@ -80,7 +86,7 @@ def non_max_suppression(img,D):
                 pass
     return Z
 
-def threshold(img,lowThresholdRatio=0.05,highThresholdRatio=0.09):
+def threshold(img,lowThresholdRatio=0.05,highThresholdRatio=0.15):
     highThreshold=img.max()*highThresholdRatio
     lowThreshold=highThreshold*lowThresholdRatio
 
@@ -121,38 +127,19 @@ def hysteresis(img,weak,strong=255):
     return img
 
 def main():
-    img=cv2.imread("../videos/3.jpg")
-    img=rgb2gray(img)
-    kernal=gaussion_kernal(size=5,sigma=1.4)
+    img1=cv2.imread("../videos/5.png")
+    img=rgb2gray(img1)
+    kernal=gaussion_kernal(size=5,sigma=2.5)
     blurred_img=cv2.filter2D(img,-1,kernal)
     line_Image,slope=sobal_filter(blurred_img)
     maxed_img=non_max_suppression(line_Image,slope)
     thresholdImg,weak,strong=threshold(maxed_img)
     segmentatedImg=hysteresis(thresholdImg,weak,strong)
+#//////////////////sobal-segmentation///////////////////////////
+    segmentatedImg=np.array(segmentatedImg,np.uint8)
+    find_reqtangles(segmentatedImg,img1)
 
 
-
-
-    plt.imshow(img, cmap="gray")
-    plt.title("h")
-    plt.axis("off")
-    plt.show()
-    plt.imshow(blurred_img, cmap="gray")
-    plt.title("hi m")
-    plt.axis("off")
-    plt.show()
-    plt.imshow(line_Image, cmap="gray")
-    plt.title("hi ma k")
-    plt.axis("off")
-    plt.show()
-    plt.imshow(maxed_img, cmap="gray")
-    plt.title("hi ma ko")
-    plt.axis("off")
-    plt.show()
-    plt.imshow(thresholdImg, cmap="gray")
-    plt.title("hi ma kore")
-    plt.axis("off")
-    plt.show()
     plt.imshow(segmentatedImg, cmap="gray")
     plt.title("hi ma kore ahi?")
     plt.axis("off")
@@ -162,5 +149,115 @@ def main():
 
     if cv2.waitKey(100000) == ord('q'):
         breakpoint()
+
+
+
+
+
+
+
+
+
+
+
+def grayscale(img):
+    return cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+def gaussian_blur(img, kernel_size = 5):
+    return cv2.GaussianBlur(img, (kernel_size, kernel_size), 0)
+def canny(img, low_threshold = 50, high_threshold = 150):
+    return cv2.Canny(img, low_threshold, high_threshold)
+
+
+def region_of_interest(img, vertices):
+    """
+    Applies an image mask.
+    Only keeps the region of the image defined by the polygon
+    formed from `vertices`. The rest of the image is set to black.
+    """
+    # defining a blank mask to start with
+    mask = np.zeros_like(img)
+
+    # defining a 3 channel or 1 channel color to fill the mask with depending on the input image
+    if len(img.shape) > 2:
+        channel_count = img.shape[2]  # i.e. 3 or 4 depending on your image
+        ignore_mask_color = (255,) * channel_count
+    else:
+        ignore_mask_color = 255
+
+    # filling pixels inside the polygon defined by "vertices" with the fill color
+    cv2.fillPoly(mask, pts=[vertices],color= ignore_mask_color)
+
+    # returning the image only where mask pixels are nonzero
+    masked_image = cv2.bitwise_and(img, mask)
+    return masked_image
+
+
+def draw_lines(img, lines, color=[255, 255, 255], thickness=2):
+    for line in lines:
+        for x1, y1, x2, y2 in line:
+            cv2.line(img, (x1, y1), (x2, y2), color, thickness)
+
+
+def hough_lines_basic(img, rho=2, theta=np.pi / 180, threshold=20, min_line_len=25, max_line_gap=10):
+    """
+    `img` should be the output of a Canny transform.
+    Returns an image with hough lines drawn.
+    """
+    lines = cv2.HoughLinesP(img, rho, theta, threshold, np.array([]), minLineLength=min_line_len,
+                            maxLineGap=max_line_gap)
+    line_img = np.zeros((img.shape[0], img.shape[1], 3), dtype=np.uint8)
+    print(lines.size)
+    draw_lines(line_img, lines)
+    return line_img
+
+
+
+
+def find_reqtangles(img,img1):
+    img=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    cnts = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0]
+    # Convert contours to an array of points
+    all_points = np.concatenate(cnts, axis=0)
+
+    # Approximate contours with polygons using RANSAC
+    for con in cnts:
+        approx=cv2.approxPolyDP(con, 0.01 * cv2.arcLength(con, True), True)
+        if len(approx) == 4:
+            x, y, w, h = cv2.boundingRect(approx)
+            print(x,y,w,h)
+            cv2.rectangle(img1, (x, y), (x + w, y + h), (255, 0, 0), 2)
+
+    # Display the image with detected rectangles
+    cv2.imshow('Rectangle Detection', img1)
+    cv2.imshow('Rectangle', img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    cv2.destroyAllWindows()
+
+def dettect(img):
+    grayImg=grayscale(img)
+    blurrImg=gaussian_blur(grayImg)
+    cannyImg=canny(blurrImg)
+    pointsPolly = np.array([[730, 600],
+                            [0, 675],
+                            [1900, 1000],
+                            [1120, 630]], dtype=np.int32)
+    spaceImg=region_of_interest(cannyImg,pointsPolly)
+
+    lineImg=hough_lines_basic(spaceImg)
+    find_reqtangles(lineImg, img)
+
+
+    #cv2.imshow("img",img)
+    #cv2.imshow("gray",grayImg)
+    #cv2.imshow("blurr",blurrImg)
+    #cv2.imshow("canny",cannyImg)
+    #cv2.imshow("ragion",spaceImg)
+    #cv2.imshow("lines",lineImg)
+
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 if __name__ == '__main__':
-    main()
+    img1 = cv2.imread("../videos/5.png")
+    dettect(img1)

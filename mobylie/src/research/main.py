@@ -42,6 +42,7 @@ def main():
     loader = videoLoader.VideoLoader("../videos/highway1.mp4")
 
     dettector = imgDetector.imgDetector()
+    loader.nextFrame()#so it will have prevImg
     while loader.nextFrame():
         start_time = time.time()
         carRes = detectCar(loader._img._bgrImg)
@@ -70,8 +71,7 @@ def main():
             cv2.putText(loader._img._bgrImg, text,
                         text_position, font_face,
                         font_scale, text_color, text_thickness)
-        ################################test###################################3
-
+        ################################test###################################
         ########################test############################
         print("-------------------------our car-------------------------------")
         print((dettector.ourCar.data.position.x, dettector.ourCar.data.position.y))
@@ -80,6 +80,13 @@ def main():
         ########################test############################
 
         ########################test############################
+
+        dettector.calcOpticalFlow(loader._prevImg._bgrImg,loader._img._bgrImg)
+        print("--------------------------avg------------------------")
+        ratio=dettector.calcAvgRatio()
+        print(dettector.calcAvgRatio())
+        print(dettector.calcway(ratio))
+        print("--------------------------avg------------------------")
 
         cv2.imshow("bgr", loader._img._bgrImg)
         cv2.imshow("hsl", loader._img._hlsImg)

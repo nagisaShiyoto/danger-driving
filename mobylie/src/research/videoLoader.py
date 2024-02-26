@@ -1,6 +1,6 @@
 import cv2
 import numpy
-
+import numpy as np
 IMAGE_WIDTH = 640
 IMAGE_HEIGHT = 420
 
@@ -23,6 +23,7 @@ class VideoLoader:
         self.cap = cv2.VideoCapture(path)
         if not self.cap.isOpened():
             raise Exception("wrong path")
+        self._img=0
 
 
     # move to the next frame
@@ -30,6 +31,7 @@ class VideoLoader:
         ret, frame = self.cap.read()
         if not ret:
             return False
+        self._prevImg=self._img
         self._img = Img(cv2.resize(frame, (IMAGE_WIDTH, IMAGE_HEIGHT), interpolation=cv2.INTER_AREA))
         return True
 

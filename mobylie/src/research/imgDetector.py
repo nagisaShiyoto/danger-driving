@@ -3,6 +3,8 @@
 from mobylie.src.research.obj import Bounding_Box
 from mobylie.src.research.obj import General_Object as obj
 
+import numpy as np
+import cv2
 IMAGE_WIDTH = 640
 IMAGE_HEIGHT = 420
 FOCAL_LENGTH = 27
@@ -28,6 +30,36 @@ class imgDetector:
         self.carArray = []
         self.signArray = []
         self.ourCar = obj.General_Object(Bounding_Box.Bounding_Box(0, 0, 0, 0), "our_car")
+
+
+    def calcOpticalFlow(self,prev, now):
+        prevGrayImg = cv2.cvtColor(prev, cv2.COLOR_BGR2GRAY)
+        grayImg = cv2.cvtColor(now, cv2.COLOR_BGR2GRAY)
+        flow = cv2.calcOpticalFlowFarneback(prevGrayImg, grayImg, None,
+                                            0.5, 3, 15,
+                                            3, 5, 1.2, 0)
+        vx, vy = np.split(flow, 2, axis=-1)
+        self.opticalFlow=np.hypot(vx,vy)
+
+    @staticmethod
+    def calcPixelCm_ratio(movedCm,movedPixels):
+        return movedCm*100/float(movedPixels)
+
+    def calcway(self,ratio):
+        x=np.abs(np.max(self.opticalFlow)*ratio[0]/1000)
+        return x
+    def calcAvgRatio(self):
+        sumRatioY=0
+        sumRatioX=0
+        arraySize=0
+        for car in self.carArray:
+            sumRatioY += imgDetector.calcPixelCm_ratio(car.distanceBetweenTwoFrames.y,
+                                                    self.opticalFlow[car.bounding_box.x][car.bounding_box.y])
+            arraySize+=1
+        return (
+            (sumRatioX/arraySize)
+            ,(sumRatioY/arraySize)
+        )
 
     def updateCar(self, res):
         cars = []
