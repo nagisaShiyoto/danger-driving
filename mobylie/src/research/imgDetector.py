@@ -79,7 +79,11 @@ class imgDetector:
             self.compareList(cars, True)
         else:
             self.copyCarArr(cars)
-
+    def aCar(self,obj,threshold):
+        for car in self.carArray:
+            if(car.bounding_box.calculateIUO(obj.bounding_box)>=threshold):
+                return True
+        return False
     def updateSign(self, res):
         signs = []
         objSplited = res.split("\n")
@@ -93,7 +97,10 @@ class imgDetector:
                                                 int(float(info[2])),
                                                 int(float(info[
                                                               3])))  # create bounding box                                     #name
-                signs.append(obj.General_Object(box, info[4]))  # add to list
+                line=obj.General_Object(box, info[4])
+                if not self.aCar(line,0.8):
+                    signs.append(line)# add to list
+
         if len(self.signArray) > 0:
             self.compareList(signs, False)
         else:
@@ -115,7 +122,7 @@ class imgDetector:
         velNonZeroCounter = 0
         accNonZeroCounter = 0
         # adds them up to have the avg
-        for sign in self.carArray:
+        for sign in self.signArray:
             if sign.distanceBetweenTwoFrames.x != 0 or sign.distanceBetweenTwoFrames.y != 0:
                 sum.position.x += sign.distanceBetweenTwoFrames.x
                 sum.position.y += sign.distanceBetweenTwoFrames.y
@@ -152,7 +159,6 @@ class imgDetector:
                     iou = tempObj.bounding_box.calculateIUO(car.bounding_box)
                     if car.name == tempObj.name and iou >= IUO_THRESHOLD:
                         tempObj.update(car)
-                        print(tempObj.id)
                         break
             else:
                 for sign in self.signArray:
@@ -173,7 +179,7 @@ class imgDetector:
     def copySignArr(self, temp):
         self.signArray.clear()
         for sign in temp:
-            self.carArray.append(sign)
+            self.signArray.append(sign)
 
     @staticmethod
     def alertUser(time, carVector, predX, predY):

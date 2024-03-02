@@ -10,7 +10,7 @@ import CCA_model as cca
 from mobylie.src.research.database import databaseManger
 # from src.research.database import databaseManger
 import kalman_filter
-
+import segmentation as seg
 
 def main():
     dataManager = databaseManger.Database_Manger("database/database.db")
@@ -47,11 +47,12 @@ def main():
         start_time = time.time()
         carRes = detectCar(loader._img._bgrImg)
         signRes = detectSign((loader._img._bgrImg))
+        signRes +="\n"+ seg.dettect(loader._img._bgrImg)
         dettector.updateCar(carRes)
         dettector.updateSign(signRes)
         dettector.updateOurCar()
         ################################test###################################
-        for car in dettector.carArray:
+        for car in dettector.signArray:
             top_left = car.bounding_box.getTopLeftPoint(car.bounding_box.x, car.bounding_box.y, car.bounding_box.width,
                                                         car.bounding_box.length)
             bottom_right = car.bounding_box.getBottomRightPoint(car.bounding_box.x, car.bounding_box.y,
