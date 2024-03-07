@@ -14,7 +14,7 @@ SENSOR_SIZE = 1 / 2.3
 class Statistics:
     # the data can use another check, but these are the base values I found.
     NOT_IN_DATA_FLAG = -1
-    DATA = {"truck": 2.7, "car": 1.6}  # the avg height of clavicles in meters
+    DATA = {"truck": 2.7, "car": 1.6,"line":3}  # the avg height of clavicles in meters
 
     @staticmethod
     def getHeight(type):
@@ -102,7 +102,7 @@ class imgDetector:
                     signs.append(line)# add to list
 
         if len(self.signArray) > 0:
-            self.compareList(signs, False)
+            self.compareList(signs, False,0.5)
         else:
             self.copySignArr(signs)
 
@@ -121,25 +121,27 @@ class imgDetector:
         posNonZeroCounter = 0
         velNonZeroCounter = 0
         accNonZeroCounter = 0
+        if(len(self.signArray)==0):
+            return
         # adds them up to have the avg
         for sign in self.signArray:
             if sign.distanceBetweenTwoFrames.x != 0 or sign.distanceBetweenTwoFrames.y != 0:
-                sum.position.x += sign.distanceBetweenTwoFrames.x
-                sum.position.y += sign.distanceBetweenTwoFrames.y
+                sum.position.x += (-sign.distanceBetweenTwoFrames.x)
+                sum.position.y += (-sign.distanceBetweenTwoFrames.y)
                 posNonZeroCounter += 1
             if sign.data.velocity.x != 0 or sign.data.velocity.y != 0:
-                sum.velocity.x += sign.data.velocity.x
-                sum.velocity.y += sign.data.velocity.y
+                sum.velocity.x += (-sign.data.velocity.x)
+                sum.velocity.y += (-sign.data.velocity.y)
                 velNonZeroCounter += 1
             if sign.data.aceloration.x != 0 or sign.data.aceloration.y != 0:
-                sum.aceloration.x += sign.data.aceloration.x
-                sum.aceloration.y += sign.data.aceloration.y
+                sum.aceloration.x += (-sign.data.aceloration.x)
+                sum.aceloration.y += (-sign.data.aceloration.y)
                 accNonZeroCounter += 1
         try:
             # calc avg
             if posNonZeroCounter != 0:
-                sum.position.x = sum.position.x / posNonZeroCounter
-                sum.position.y = sum.position.y / posNonZeroCounter
+                sum.position.x += sum.position.x / posNonZeroCounter
+                sum.position.y += sum.position.y / posNonZeroCounter
                 self.ourCar.data.position.x += sum.position.x
                 self.ourCar.data.position.y += sum.position.y
             if velNonZeroCounter != 0:
@@ -151,8 +153,7 @@ class imgDetector:
         except ZeroDivisionError:
             print("devided by zero")
 
-    def compareList(self, temp, carVector):
-        IUO_THRESHOLD = 0.6
+    def compareList(self, temp, carVector,IUO_THRESHOLD = 0.6):
         for tempObj in temp:
             if carVector:
                 for car in self.carArray:

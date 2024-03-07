@@ -33,7 +33,7 @@ class cca_model:
     """create the class, calc weight, create prediction"""
 
     def __init__(self, data):
-
+        self.certentry=0
         self.weighTracker = {}
         try:
             Tracker, allData = cca_model.dictToArrays(data)  # create an array from a dict

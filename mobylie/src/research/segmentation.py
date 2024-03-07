@@ -192,6 +192,7 @@ def region_of_interest(img, vertices):
 
 
     # returning the image only where mask pixels are nonzero
+    #masked_image = cv2.bitwise_or(img, mask)
     masked_image = cv2.bitwise_and(img, mask)
     return masked_image
 
@@ -294,11 +295,11 @@ def dettect(img):
     grayImg=grayscale(whiteYelloImg)
     blurrImg=gaussian_blur(grayImg)
     cannyImg=canny(blurrImg)
-    pointsPolly = np.array([[0, 270],
-                            [0, 360],
-                            [570, 400],
-                            [350, 230],
-                            [270,230]], dtype=np.int32)
+    pointsPolly = np.array([[10, 270],
+                            [10, 340],
+                            [550, 390],
+                            [315, 220],
+                            [240,240]], dtype=np.int32)
     spaceImg=region_of_interest(cannyImg,pointsPolly)
     #lineImg=hough_lines_basic(spaceImg)
     return find_reqtangles(spaceImg, img)
@@ -309,7 +310,7 @@ def dettect(img):
     cv2.imwrite("canny.png",cannyImg)
     cv2.imshow("ragion",spaceImg)
     cv2.imshow("lines",lineImg)
-    cv2.waitKey(100)
+    cv2.waitKey(1000)
     cv2.destroyAllWindows()
     #return find_squre(lineImg, img)
     return find_reqtangles(spaceImg, img)

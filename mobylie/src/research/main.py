@@ -61,9 +61,11 @@ def main():
             intBottomRight = (int(bottom_right[0]), int(bottom_right[1]))  # parse from float to int
             cv2.rectangle(loader._img._bgrImg, intTopLeft, intBottomRight, (255, 0, 0), 1)
 
-            text = str(int(car.data.position.x)) + " " \
-                   + str(int(car.data.position.y)) + " " \
-                   + str(int(car.distance))
+            text =(str(car.id)+" " \
+                   #+ str(int(car.data.position.x)) + " " \
+                   #+ str(int(car.data.position.y)) + " " \
+                   #+ str(int(car.distance))
+                   )
             text_position = (intTopLeft[0], intBottomRight[1] - 10)
             font_face = cv2.FONT_HERSHEY_SIMPLEX
             font_scale = 0.5
