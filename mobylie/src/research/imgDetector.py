@@ -109,12 +109,18 @@ class imgDetector:
     # calc the distance in cm probably
     @staticmethod
     def calcDistanceWay1(objectName, boundingBox):
-        num_of_pixels = IMAGE_HEIGHT * IMAGE_WIDTH
-        objHight = Statistics.getHeight(objectName)
-        if (objHight == Statistics.NOT_IN_DATA_FLAG):
-            return Statistics.NOT_IN_DATA_FLAG
-        return (FOCAL_LENGTH * objHight * SENSOR_SIZE * num_of_pixels) / (
+        if(boundingBox.y<310):
+            num_of_pixels = IMAGE_HEIGHT * IMAGE_WIDTH
+            objHight = Statistics.getHeight(objectName)
+            if (objHight == Statistics.NOT_IN_DATA_FLAG):
+                return Statistics.NOT_IN_DATA_FLAG
+            dis= (FOCAL_LENGTH * objHight * SENSOR_SIZE * num_of_pixels) / (
                     boundingBox.getLength() * IMAGE_HEIGHT * 100.0)
+            if objectName=="line" and dis>15:
+                return 0
+            return dis
+        else:
+            return 0
 
     def updateOurCar(self):
         sum = obj.Data(obj.Vec(0, 0), obj.Vec(0, 0), obj.Vec(0, 0))
@@ -125,11 +131,12 @@ class imgDetector:
             return
         # adds them up to have the avg
         for sign in self.signArray:
-            if sign.distanceBetweenTwoFrames.x != 0 or sign.distanceBetweenTwoFrames.y != 0:
+            if sign.distanceBetweenTwoFrames.x <= 0 or sign.distanceBetweenTwoFrames.y <= 0:
                 sum.position.x += (-sign.distanceBetweenTwoFrames.x)
                 sum.position.y += (-sign.distanceBetweenTwoFrames.y)
                 posNonZeroCounter += 1
             if sign.data.velocity.x != 0 or sign.data.velocity.y != 0:
+
                 sum.velocity.x += (-sign.data.velocity.x)
                 sum.velocity.y += (-sign.data.velocity.y)
                 velNonZeroCounter += 1

@@ -192,7 +192,6 @@ def region_of_interest(img, vertices):
 
 
     # returning the image only where mask pixels are nonzero
-    #masked_image = cv2.bitwise_or(img, mask)
     masked_image = cv2.bitwise_and(img, mask)
     return masked_image
 

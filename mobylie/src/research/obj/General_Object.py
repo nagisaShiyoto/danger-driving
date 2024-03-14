@@ -61,10 +61,8 @@ class General_Object:
 
         self.distance=imgeDetector.imgDetector.calcDistanceWay1(name,bounding_box)#check for distance
         point=Vec(bounding_box.x,(bounding_box.y-(bounding_box.length/2)))#getting the point it checked the distance
-        ########################test############################
         if(name!="our_car"):
             self.data.position.x,self.data.position.y = self.get_X_Y_distance(self.distance,point)
-        ########################test############################
     def get_X_Y_distance(self,distance_from_point,point):
         rad_degree=math.atan(point.y/point.x)
         x_distance=distance_from_point*math.cos(rad_degree)
