@@ -3,14 +3,15 @@ import matplotlib.pyplot as plt
 from scipy import stats
 import math
 
-"""
-to visualize the gruph for twsting
-input:x,y points,b-the slpoe and the b of the graph
-output:none
-"""
+
 
 
 def plot_regression_line(x, y, b):
+    """
+    to visualize the gruph for twsting
+    input:x,y points,b-the slpoe and the b of the graph
+    output:none
+    """
     # plotting the actual points as scatter plot
     plt.scatter(x, y, color="m",
                 marker="+", s=30)
@@ -32,33 +33,41 @@ class cca_model:
     AMOUNT_OF_X_VARS = 8
     """create the class, calc weight, create prediction"""
 
-    def __init__(self, data):
+    def __init__(self, data,showGraph):
+        """
+        create the CCA model including the regression
+        input: data-all the vars and data for the pred
+        output:none
+        """
         self.certentry=0
         self.weighTracker = {}
         try:
             Tracker, allData = cca_model.dictToArrays(data)  # create an array from a dict
             self.weights = cca_model.calc_weights(allData[:self.AMOUNT_OF_X_VARS],
                                                   np.tile(allData[self.AMOUNT_OF_X_VARS:], (self.AMOUNT_OF_X_VARS, 1)))
+
             for key, value in Tracker.items():
                 # make a dict with name and weight
                 self.weighTracker[key] = self.weights[value]
             points = cca_model.calcLinarPoint(allData, self.weights)  # create the linear point from data
             self.m, self.b, r, p, std_err = stats.linregress(points[0], points[1])  # calc the regrassion
-            plot_regression_line(points[0], points[1], (self.b, self.m))  # testing the model
+            if showGraph:
+                plot_regression_line(points[0], points[1], (self.b, self.m))  # testing the model
             self.certentry = r*r
         except:
             self.m = 0
             self.b = 0
 
-    """
-    getting from dettector the values for the prediction
-    input:dettector-the one with all the values
-        Y_values-say if we want the y values(1) or the x values(0)
-    output: the data we need for prediction
-    """
+
 
     @staticmethod
     def getValues(dettector, Y_values, time_passed):
+        """
+        getting from dettector the values for the prediction
+        input:dettector-the one with all the values
+            Y_values-say if we want the y values(1) or the x values(0)
+        output: the data we need for prediction
+        """
         angle = 0
         sumVel = [0, 0]
         for car in dettector.carArray:
@@ -73,13 +82,14 @@ class cca_model:
                 sumVel[Y_values] / len(dettector.carArray),
                 0, 0, time_passed)
 
-    """
-    make a correlation based prediction
-    input:the state of the system
-    output: the future state 
-    """
+
 
     def predict(self, input):
+        """
+        make a correlation based prediction
+        input:the state of the system
+        output: the future state
+        """
         if self.m != 0 and self.b != 0:
             # create the state by adding the weighted vars
             state = np.sum(input * self.weights[:len(input)])
@@ -88,15 +98,15 @@ class cca_model:
             return prediction / self.weights[8]
         return 0
 
-    """
-    create an array from dictonary
-    input: dictinary with names as key and arrays of data as values
-    output:tracker-a dictinary with name and his place in the array
-            data-array of all the data array
-    """
 
     @staticmethod
     def dictToArrays(dictinary_data):
+        """
+        create an array from dictonary
+        input: dictinary with names as key and arrays of data as values
+        output:tracker-a dictinary with name and his place in the array
+                data-array of all the data array
+        """
         data = []
         tracker = {}
         for key, value in dictinary_data.items():
@@ -104,15 +114,16 @@ class cca_model:
             tracker[key] = len(data) - 1
         return tracker, data
 
-    """
-    after the creation of the waights we need to create the value of that weights
-    input:allData-array of arrays with all the needed data
-                    weight- the weight we need to put on every array
-    output: the point on the gruph(input-X,resualt-Y)
-    """
+
 
     @staticmethod
     def calcLinarPoint(allData, weights):
+        """
+        after the creation of the waights we need to create the value of that weights
+        input:allData-array of arrays with all the needed data
+                        weight - the weight we need to put on every array
+        output: the point on the gruph(input-X,resualt-Y)
+        """
         weighted_points = []
         for idx, wight in enumerate(weights):
             weighted_points.append(np.dot(wight, allData[idx]))
@@ -124,16 +135,17 @@ class cca_model:
         result = weighted_points[8]
         return input, result
 
-    """
-    calc the eigenVector and eigenValue of the multypication of 4 matrixes
-    input:the matrixes by order
-    output:eigenValue-good to have,
-        eigenVector-from here we can get the weights,
-        wanted_value_vector-the col of the weights(from the eigenValue matrix)
-    """
+
 
     @staticmethod
     def getEigenVector(first, second, third, last):
+        """
+        calc the eigenVector and eigenValue of the multypication of 4 matrixes
+        input:the matrixes by order
+        output:eigenValue-good to have,
+            eigenVector-from here we can get the weights,
+            wanted_value_vector-the col of the weights(from the eigenValue matrix)
+        """
         # nultyplying the matrixes,the order is important
         Rx = np.matmul(np.matmul(np.matmul(first, second), third), last)
         eigenValue, eigenVector = np.linalg.eig(Rx)
@@ -141,16 +153,17 @@ class cca_model:
         wanted_value_vector = np.argmax(np.sqrt(eigenValue))
         return eigenValue, eigenVector, wanted_value_vector
 
-    """
-    calculating the weights of the CCA model for the prediction
-    input:input_data-the data we get in the prediction time
-        output_data-the data we want to infer,
-        both of these data we get now for the prediction
-    output:array of all the weights
-    """
+
 
     @staticmethod
     def calc_weights(input_data, output_data):
+        """
+        calculating the weights of the CCA model for the prediction
+        input:input_data-the data we get in the prediction time
+            output_data-the data we want to infer,
+            both of these data we get now for the prediction
+        output:array of all the weights
+        """
         # calculating the covariance matrix
         cov = np.cov(input_data, output_data)
         Rxx = cov[:-len(input_data), :-len(output_data)]  # cov(x,x)

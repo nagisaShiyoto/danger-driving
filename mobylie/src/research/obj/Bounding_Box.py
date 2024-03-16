@@ -2,12 +2,24 @@ class Bounding_Box:  # a class that represents a bounding box
 
     # Constructors
     def __init__(self):  # an empty constructors
+        """
+        create the bounding box with 0 as all values
+        input:none
+        output:none
+        """
         self.x = 0
         self.y = 0
         self.width = 0
         self.length = 0
 
     def __init__(self, x, y, width, length):
+        """
+        create the bounding box
+        input: (x, y)-the point of the middle of the bounding box
+                width-the width of the bounding box
+                length-the length of the bounding box
+        output:none
+        """
         # we get as a defult the middle point. here we are transforming it to the top left point why though?
         self.x = x
         self.y = y
@@ -16,6 +28,11 @@ class Bounding_Box:  # a class that represents a bounding box
 
     # Methods
     def calculateIUO(self, other):
+        """
+        calc how much one box share the same erea with another
+        input: other-the bounding box to compare to
+        output: fraction that represent how much one is part of the other
+        """
         if isinstance(other, Bounding_Box):
             xy1 = self.getTopLeftPoint(self.x, self.y, self.width, self.length)
             xy2 = self.getTopLeftPoint(other.x, other.y, other.width, other.length)
@@ -43,38 +60,27 @@ class Bounding_Box:  # a class that represents a bounding box
 
     @staticmethod
     def getTopLeftPoint(x, y, width, length):
+        """
+        calc the place of the top left point in the img
+        input:(x, y)-the point of the middle of the bounding box
+                width-the width of the bounding box
+                length-the length of the bounding box
+        output: the place of the top left point
+        """
         x -= (width / 2)
         y += (length / 2)
         return (x, y)
 
     @staticmethod
     def getBottomRightPoint(x, y, width, length):
+        """
+        calc the place of Bottom Right Point in the img
+        input:(x, y)-the point of the middle of the bounding box
+                width-the width of the bounding box
+                length-the length of the bounding box
+        output: the place of the Bottom Right Point
+        """
         x += (width / 2)
         y -= (length / 2)
         return (x, y)
 
-    # Setters
-    def setX(self, x):
-        self.x = x
-
-    def setY(self, y):
-        self.y = y
-
-    def setWidth(self, width):
-        self.width = width
-
-    def setLength(self, length):
-        self.length = length
-
-    # Getters
-    def getX(self):
-        return self.x
-
-    def getY(self):
-        return self.y
-
-    def getWidth(self):
-        return self.width
-
-    def getLength(self):
-        return self.length
