@@ -44,7 +44,7 @@ def show_data(loader, detector, time_passed, kfX, kfY, Zx, Zy):
 
 def main():
     # creating the video loader
-    loader = videoLoader.VideoLoader("../videos/highway1.mp4")
+    loader = videoLoader.VideoLoader()
     loader.nextFrame()  # so it will have prevImg
 
     # creating the image detector

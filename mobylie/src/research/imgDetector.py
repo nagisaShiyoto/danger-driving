@@ -14,7 +14,7 @@ import cv2
 class Statistics:
     # the data can use another check, but these are the base values I found.d
     NOT_IN_DATA_FLAG = -1
-    DATA = {"truck": 5, "car": 2.6, "line": 1.5}  # the avg height of clavicles in meters
+    DATA = {"truck": 5, "car": 2.6, "line": 1.3}  # the avg height of clavicles in meters
 
     @staticmethod
     def getHeight(type):

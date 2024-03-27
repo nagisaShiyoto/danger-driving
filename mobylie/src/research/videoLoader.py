@@ -23,13 +23,17 @@ class VideoLoader:
         input:none
         output:none
         """
-        self.cap = cv2.VideoCapture(0)
         self.config_data = self.read_config()
-        if not self.cap.isOpened():
-            raise Exception("camera isn't available")
+        if self.config_data["loading paths"]["live_feed"]:
+            self.cap = cv2.VideoCapture(0)
+            self.config_data = self.read_config()
+            if not self.cap.isOpened():
+                raise Exception("camera isn't available")
+        else:
+            self.use_vid(self.config_data["loading paths"]["video path"])
 
     # open video
-    def __init__(self, path):
+    def use_vid(self, path):
         """
         set the setting to get the images from a video
         input:path-the path to the vid

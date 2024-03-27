@@ -9,6 +9,7 @@
 
   "loading paths":
   {
+    "live_feed": false,
     "video path" : "../videos/highway1.mp4",
     "database path" : "database/database.db"
   },
