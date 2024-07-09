@@ -1,0 +1,36 @@
+{
+  "calculating info":
+  {
+    "image width" : 640,
+    "image height" : 420,
+    "FOCAL LENGTH" : 27,
+    "SENSOR SIZE" : 0.4347826087
+  },
+
+  "loading paths":
+  {
+    "live_feed": false,
+    "video path" : "../videos/highway1.mp4",
+    "database path" : "database/database.db"
+  },
+  "coloring options":
+  {
+    "cars color" :[0,255,0],
+    "static objects color" : [255,0,0]
+  },
+  "data":
+  {
+    "collects data" : true,
+    "show x graph": false,
+    "show y graph": false,
+    "show ourCar data": false,
+    "show rgb img": true,
+    "show hls img": false,
+    "car detection": true,
+    "static objects detection": true,
+    "show detection time": true,
+    "alert user": true,
+    "show prediction": true,
+    "show obj Data": true
+  }
+}
